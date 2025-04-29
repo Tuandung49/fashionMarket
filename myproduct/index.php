@@ -53,7 +53,7 @@ function sort_link($field, $label, $current_sort, $current_order) {
         <td><?= htmlspecialchars($row['colour']) ?></td>
         <td>
             <?php if (!empty($row['image'])): ?>
-                <img src="uploads/<?= htmlspecialchars($row['image']) ?>" width="60">
+                <img src="<?= htmlspecialchars($row['image']) ?>" width="60">
             <?php else: ?>
                 Không có ảnh
             <?php endif; ?>

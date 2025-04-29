@@ -36,7 +36,7 @@ $conn->close();
     <title>
         Modimal - Women Clothing
     </title>
-    <script src="3.4.16">
+    <script src="../config/tailwind3.4.16">
     </script>
     <!-- <link href="all.min.css" rel="stylesheet" /> -->
 </head>
