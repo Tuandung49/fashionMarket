@@ -53,6 +53,20 @@ function renderPagination() {
 
     const totalPages = Math.ceil(accounts.length / itemsPerPage);
 
+    // Thêm nút Previous (←)
+    if (currentPage > 1) {
+        const prevBtn = document.createElement('button');
+        prevBtn.innerHTML = '← Previous';
+        prevBtn.classList.add('pagination-btn');
+        prevBtn.onclick = () => {
+            currentPage--;
+            renderTable();
+            renderPagination(); // Cập nhật lại phân trang
+        };
+        paginationDiv.appendChild(prevBtn);
+    }
+
+    // Các nút số trang (giữ nguyên)
     for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement('button');
         btn.innerText = i;
@@ -62,6 +76,19 @@ function renderPagination() {
             renderTable();
         };
         paginationDiv.appendChild(btn);
+    }
+
+    // Thêm nút Next (→)
+    if (currentPage < totalPages) {
+        const nextBtn = document.createElement('button');
+        nextBtn.innerHTML = 'Next →';
+        nextBtn.classList.add('pagination-btn');
+        nextBtn.onclick = () => {
+            currentPage++;
+            renderTable();
+            renderPagination(); // Cập nhật lại phân trang
+        };
+        paginationDiv.appendChild(nextBtn);
     }
 }
 
@@ -76,3 +103,4 @@ function remove(id) {
 window.onload = function () {
     fetchAccounts();
 }
+
