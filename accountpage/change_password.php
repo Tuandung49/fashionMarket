@@ -35,6 +35,6 @@ $stmt->bind_param("ss", $newHashed, $username);
 $stmt->execute();
 
 echo "Đổi mật khẩu thành công.";
-header("Location: account.php");
+header("Location: ../accountpage/account.php");
 exit;
 ?>
