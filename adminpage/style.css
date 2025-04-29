@@ -1,0 +1,86 @@
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 30px;
+    background: #f4f4f4;
+}
+
+.search-bar {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    margin: auto;
+}
+
+.search-input {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.search-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid#ccc;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+}
+
+.search-input button {
+    padding: 10px 16px;
+    border: none;
+    background: rgb(73, 73, 160);
+    color: white;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+
+.role-filter {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.role-filter label {
+    font-size: 14px;
+}
+
+.account-table {
+    width: 100%;
+    max-width: 800px;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+}
+
+.account-table th {
+    background: #4165f3;
+    color: white;
+}
+
+button.edit {
+    background-color: green;
+}
+
+button.delete {
+    background-color: red;
+}
+
+button.update {
+    background-color: yellow;
+}
+
+#pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#pagination button.active {
+    background: #4165f3;
+    color: white;
+}
