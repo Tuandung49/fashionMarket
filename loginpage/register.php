@@ -1,5 +1,5 @@
 <?php
-require '../config/b.php';
+require '../config/db.php';
 
 $fullname = $_POST['fullname'];
 $username = $_POST['username'];
