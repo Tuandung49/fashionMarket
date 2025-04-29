@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý sản phẩm</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body></body>
+<?php
+require 'config.php';
+$id = $_GET['id'];
+$conn->query("DELETE FROM products WHERE product_id = $id");
+header("Location: index.php");
+?>
