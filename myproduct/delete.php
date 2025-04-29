@@ -9,6 +9,6 @@
 <?php
 require 'config.php';
 $id = $_GET['id'];
-$conn->query("DELETE FROM products WHERE product_id = $id");
+$conn->query("DELETE FROM product_instock WHERE product_id = $id");
 header("Location: index.php");
 ?>

@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     move_uploaded_file($_FILES['image']['tmp_name'], "uploads/" . $image);
 
-    $stmt = $conn->prepare("INSERT INTO products (product_display_name, description, quantity, price, colour, image) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO product_instock (product_display_name, description, quantity, price, colour, image) VALUES (?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssidss", $name, $desc, $qty, $price, $colour, $image);
     $stmt->execute();
     header("Location: index.php");

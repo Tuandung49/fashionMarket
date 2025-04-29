@@ -16,7 +16,7 @@ $allowed = ['product_display_name', 'quantity', 'price'];
 $sort = in_array($sort, $allowed) ? $sort : 'product_id';
 $order = ($order === 'desc') ? 'desc' : 'asc';
 
-$sql = "SELECT * FROM products ORDER BY $sort $order";
+$sql = "SELECT * FROM product_instock ORDER BY $sort $order";
 $result = $conn->query($sql);
 
 function sort_link($field, $label, $current_sort, $current_order) {

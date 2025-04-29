@@ -10,7 +10,7 @@
 $host = 'localhost';
 $user = 'root';
 $pass = '';
-$db = 'product_db';
+$db = 'fashionmarket';
 
 $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
