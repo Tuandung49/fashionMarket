@@ -12,25 +12,38 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Handle Category Filter
+$category = isset($_GET['category']) ? $_GET['category'] : 'all';
+$query = "SELECT * FROM product_instock";
 
-$sql = "SELECT * FROM product_instock LIMIT 6"; // Replace 'products' with your table name
-$result = $conn->query($sql);
+if ($category !== 'all') {
+    $query .= " WHERE category = ? LIMIT 6";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $category);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $query .= " LIMIT 6"; // Apply LIMIT when no category filter is used
+    $result = $conn->query($query);
+}
 
-$products = []; // Initialize an empty array
-$products_bsl = []; // Initialize an empty array
+// Fetch Products
+$products = [];
+$products_bsl = [];
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $products[] = $row; // Add each product to the array
+        $products[] = $row;
     }
 }
 
-$sql = "SELECT * FROM product_instock ORDER BY price DESC LIMIT 4"; // Replace 'products' with your table name
-$result = $conn->query($sql);
+// Fetch Best-Selling Products (Price DESC)
+$sql_bsl = "SELECT * FROM product_instock ORDER BY price DESC LIMIT 4";
+$result_bsl = $conn->query($sql_bsl);
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $products_bsl[] = $row; // Add each product to the array
+if ($result_bsl->num_rows > 0) {
+    while ($row = $result_bsl->fetch_assoc()) {
+        $products_bsl[] = $row;
     }
 }
 
@@ -39,17 +52,18 @@ $conn->close();
 ?>
 
 
+
 <?php
-    include '../layouts/head.php';
+include '../layouts/head.php';
 ?>
 
 <body class="font-sans">
     <?php
-        include '../layouts/multiplatform_chat.php'
+    include '../layouts/multiplatform_chat.php'
     ?>
 
     <?php
-        include '../layouts/header_nav.php';
+    include '../layouts/header_nav.php';
     ?>
 
     <!-- Main Content -->
@@ -117,46 +131,29 @@ $conn->close();
                         </select>
                     </div>
 
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Sort By
-                            <span>
-                                +
-                            </span>
+                    <!-- Dropdown Filter -->
+                    <form method="GET" class="mb-6">
+                        <label for="filter" class="block text-gray-700 font-medium mb-2">Select Category:</label>
+                        <select id="filter" name="category"
+                            class="block w-64 px-4 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring focus:ring-blue-300">
+                            <option value="all">All</option>
+                            <option value="Beige">Beige</option>
+                            <option value="Black">Black</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Brown">Brown</option>
+                            <option value="Green">Green</option>
+                            <option value="Grey">Category 5</option>
+                            <option value="Maroon">Category 5</option>
+                            <option value="Navy Blue">Category 5</option>
+                            <option value="Orange">Category 5</option>
+                            <option value="Pink">Category 5</option>
+
+                        </select>
+                        <button type="submit" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">
+                            Apply
                         </button>
-                    </div>
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Size
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Color
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Collection
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Fabric
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
+                    </form>
+
                 </div>
             </aside>
             <!-- Product Grid -->
@@ -175,8 +172,11 @@ $conn->close();
                             echo "src=" . htmlspecialchars($product['image']) . ">";
                             echo "<div class='mt-4'>";
                             echo "<h3 class='text-gray-700 font-bold'> " . htmlspecialchars($product['product_display_name']) . "</h3>";
-                            echo "<p class='text-gray-500'>" . htmlspecialchars($product['price']) . "</p>";
-                            echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
+                            echo "<p class='text-gray-500'>$" . htmlspecialchars($product['price']) . "</p>";
+                            // echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
+                            echo "<button class='mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 transition-all'>";
+                            echo "Add to Cart";
+                            echo "</button>";
                             echo "</div>";
                             echo "</div>";
                         }
@@ -240,8 +240,8 @@ $conn->close();
                                 echo "src=" . htmlspecialchars($product['image']) . ">";
                                 echo "<div class='mt-4'>";
                                 echo "<h3 class='text-gray-700 font-bold'> " . htmlspecialchars($product['product_display_name']) . "</h3>";
-                                echo "<p class='text-gray-500'>" . htmlspecialchars($product['price']) . "</p>";
-                                echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
+                                echo "<p class='text-gray-500'>$" . htmlspecialchars($product['price']) . "</p>";
+                                // echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
                                 echo "</div>";
                                 echo "</div>";
                             }
