@@ -31,6 +31,17 @@
             </tr>
         </thead>
         <tbody id="accountTableBody"></tbody>
+        <?php while ($row = $result->fetch_assoc()) { ?>
+            <tr>
+                <td><?= $row['name'] ?></td>
+                <td><?= $row['email'] ?></td>
+                <td><?= $row['role'] ?></td>
+                <td>
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </td>
+            </tr>
+        <?php } ?>
     </table>
 
     <div id="pagination"></div>
