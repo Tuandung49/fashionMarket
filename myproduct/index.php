@@ -8,7 +8,7 @@
 <body>
 <header style="background-color: #4caf50; padding: 10px;">
     <nav style="display: flex; gap: 20px;">
-        <a href="fashionMarket\homePage\HomePage.php" style="color: white; text-decoration: none; font-weight: bold;">🏠 Trang chủ</a>
+        <a href="../homePage/HomePage.php" style="color: white; text-decoration: none; font-weight: bold;">🏠 Trang chủ</a>
         <a href="myorder.php" style="color: white; text-decoration: none; font-weight: bold;">📦 Đơn hàng của tôi</a>
     </nav>
 </header>
