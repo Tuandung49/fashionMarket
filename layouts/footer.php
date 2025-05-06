@@ -12,12 +12,12 @@
                     </button>
                 </form>
                 <p class="text-sm mt-2">
-                    By Submitting your email, you agree to receive advertising emails from Modimal.
+                    By Submitting your email, you agree to receive advertising emails from FashionMarket.
                 </p>
             </div>
             <div>
                 <h3 class="font-bold mb-4">
-                    About Modimal
+                    About Us
                 </h3>
                 <ul class="space-y-2">
                     <li>
@@ -86,7 +86,7 @@
                 <ul class="space-y-2">
                     <li>
                         <a class="hover:underline" href="#">
-                            Modimal Club
+                            FashionMarket Group
                         </a>
                     </li>
                     <li>
@@ -103,6 +103,6 @@
             </div>
         </div>
         <div class="text-center text-sm mt-8">
-            © 2023 Modimal. All Rights Reserved.
+            © 2025 Fashion. Market All Rights Reserved.
         </div>
     </footer>

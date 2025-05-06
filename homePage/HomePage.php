@@ -40,16 +40,16 @@ $conn->close();
 
 
 <?php
-    include '../layouts/head.php';
+include '../layouts/head.php';
 ?>
 
 <body class="font-sans">
     <?php
-        include '../layouts/multiplatform_chat.php'
+    include '../layouts/multiplatform_chat.php'
     ?>
 
     <?php
-        include '../layouts/header_nav.php';
+    include '../layouts/header_nav.php';
     ?>
 
     <!-- Main Content -->
@@ -75,7 +75,7 @@ $conn->close();
         </form>
 
         <!-- Banner -->
-        <div class="bannerz-100 w-full h-64 bg-blue-300">
+        <div class="bannerz-100 w-full h-64 bg-black-300">
             <div class="w-full">
                 <img src="https://placehold.co/1920x300" alt="Banner" class="w-full h-100">
             </div>
@@ -83,101 +83,52 @@ $conn->close();
 
         <div class="flex relative z-0">
             <!-- Filters -->
-            <aside class="w-1/4 pr-8">
-                <h2 class="text-lg font-bold mb-4">
-                    Filters
-                </h2>
-                <div class="space-y-4">
-
-                    <!-- Dropdown Filter -->
-                    <div class="mb-6">
-                        <label for="filter" class="block text-gray-700 font-medium mb-2">Select Category:</label>
-                        <select id="filter"
-                            class="block w-64 px-4 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring focus:ring-blue-300">
-                            <option value="all">All</option>
-                            <option value="category1">Category 1</option>
-                            <option value="category2">Category 2</option>
-                            <option value="category3">Category 3</option>
-                            <option value="category4">Category 4</option>
-                            <option value="category5">Category 5</option>
-                        </select>
-                    </div>
-
-                    <!-- Dropdown Filter -->
-                    <div class="mb-6">
-                        <label for="filter" class="block text-gray-700 font-medium mb-2">Select Category:</label>
-                        <select id="filter"
-                            class="block w-64 px-4 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring focus:ring-blue-300">
-                            <option value="all">All</option>
-                            <option value="category1">Category 1</option>
-                            <option value="category2">Category 2</option>
-                            <option value="category3">Category 3</option>
-                            <option value="category4">Category 4</option>
-                            <option value="category5">Category 5</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Sort By
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Size
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Color
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Collection
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="flex justify-between w-full text-left text-gray-700 font-medium">
-                            Fabric
-                            <span>
-                                +
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </aside>
+            <?php
+            include '../homePage/filter.php'
+            ?>
             <!-- Product Grid -->
             <section class="w-3/4">
                 <h2 class="text-lg font-bold mb-6">
                     6 Items
                 </h2>
-                <div class="grid grid-cols-3 gap-8">
-                    <!-- Product Card -->
 
+                <!-- Product Card -->
+
+                <div class="grid grid-cols-3 gap-8">
                     <?php
                     if (!empty($products)) {
                         foreach ($products as $product) {
-                            echo "<div>";
-                            echo "<img alt='Elastic Waist Pants' class='w-full'";
-                            echo "src=" . htmlspecialchars($product['image']) . ">";
-                            echo "<div class='mt-4'>";
-                            echo "<h3 class='text-gray-700 font-bold'> " . htmlspecialchars($product['product_display_name']) . "</h3>";
-                            echo "<p class='text-gray-500'>" . htmlspecialchars($product['price']) . "</p>";
-                            echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
+                            // Wrap the entire product card in an anchor tag.
+                            // echo "<a href='../detailsPage/productdetails.php?id=" . htmlspecialchars($product['product_id']) . "' class='block'>";
+                            // echo "<div class='bg-white p-4 rounded-lg shadow hover:shadow-lg transition duration-200'>";
+                            // echo "<img alt='Elastic Waist Pants' class='w-full object-cover' src='" . htmlspecialchars($product['image']) . "'>";
+                            // echo "<div class='mt-4'>";
+                            // echo "<h3 class='text-gray-700 font-bold'>" . htmlspecialchars($product['product_display_name']) . "</h3>";
+                            // echo "<p class='text-gray-500'>" . htmlspecialchars($product['price']) . "</p>";
+                            // echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
+                            // echo "</div>";
+                            // echo "</div>";
+                            // echo "</a>";
+
+                            //
+                            echo "<div class='max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 p-4'>";
+
+                            // Product details area wrapped in a link to the product overview page
+                            echo "<a href='../detailsPage/productdetails.php?id=" . htmlspecialchars($product['product_id']) . "' class='block'>";
+                            echo "<img alt='" . htmlspecialchars($product['product_display_name']) . "' class='w-full h-64 object-contain rounded-md' src='" . htmlspecialchars($product['image']) . "'>";
+                            echo "<div class='mt-4 text-center'>";
+                            echo "<h3 class='text-gray-800 font-semibold text-lg'>" . htmlspecialchars($product['product_display_name']) . "</h3>";
+                            echo "<p class='text-gray-600 text-xl font-bold'>$" . htmlspecialchars($product['price']) . "</p>";
                             echo "</div>";
+                            echo "</a>";
+
+                            // Add to Cart button linking directly to the cart page
+                            echo "<div class='mt-4 text-center'>";
+                            echo "<a href='../cart.php?id=" . htmlspecialchars($product['product_id']) . "' class='inline-block px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
+                            echo "🛒 Add to Cart";
+                            echo "</a>";
+                            echo "</div>";
+
                             echo "</div>";
                         }
                     } else {
