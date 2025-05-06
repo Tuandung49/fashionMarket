@@ -77,7 +77,7 @@ include '../layouts/head.php';
         <!-- Banner -->
         <div class="bannerz-100 w-full h-64 bg-black-300">
             <div class="w-full">
-                <img src="https://placehold.co/1920x300" alt="Banner" class="w-full h-100">
+                <img src="../image/1920x300_cates_banner_1.jpg  " alt="Banner" class="w-full h-100">
             </div>
         </div>
 
@@ -186,6 +186,7 @@ include '../layouts/head.php';
                         <?php
                         if (!empty($products_bsl)) {
                             foreach ($products_bsl as $product) {
+                                echo "<a href='../detailsPage/productdetails.php?id=" . htmlspecialchars($product['product_id']) . "' class='block'>";
                                 echo "<div>";
                                 echo "<img alt='Elastic Waist Pants' class='w-full'";
                                 echo "src=" . htmlspecialchars($product['image']) . ">";
@@ -195,6 +196,7 @@ include '../layouts/head.php';
                                 echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
                                 echo "</div>";
                                 echo "</div>";
+                                echo "</a>";
                             }
                         } else {
                             echo "<p>No products available.</p>";
