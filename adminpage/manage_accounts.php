@@ -31,6 +31,26 @@
             </tr>
         </thead>
         <tbody id="accountTableBody"></tbody>
+        <?php
+        // Kết nối database
+        $conn = new mysqli("localhost", "root", "", "ten_database_cua_ban");
+
+        // Kiểm tra kết nối
+        if ($conn->connect_error) {
+            die("Kết nối thất bại: " . $conn->connect_error);
+        }
+
+        // Truy vấn dữ liệu
+        $sql = "SELECT * FROM accounts"; // Đảm bảo tên bảng đúng
+        $result = $conn->query($sql);
+
+        // Kiểm tra lỗi truy vấn
+        if (!$result) {
+            die("Lỗi truy vấn: " . $conn->error);
+        }
+        ?>
+
+        <!-- Hiển thị dữ liệu -->
         <?php while ($row = $result->fetch_assoc()) { ?>
             <tr>
                 <td><?= $row['name'] ?></td>
@@ -42,6 +62,7 @@
                 </td>
             </tr>
         <?php } ?>
+
     </table>
 
     <div id="pagination"></div>
