@@ -167,18 +167,39 @@ include '../layouts/head.php';
                     <?php
                     if (!empty($products)) {
                         foreach ($products as $product) {
-                            echo "<div>";
-                            echo "<img alt='Elastic Waist Pants' class='w-full'";
-                            echo "src=" . htmlspecialchars($product['image']) . ">";
-                            echo "<div class='mt-4'>";
-                            echo "<h3 class='text-gray-700 font-bold'> " . htmlspecialchars($product['product_display_name']) . "</h3>";
-                            echo "<p class='text-gray-500'>$" . htmlspecialchars($product['price']) . "</p>";
-                            // echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
-                            echo "<button class='mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 transition-all'>";
-                            echo "Add to Cart";
+                            // echo "<div>";
+                            // echo "<img alt='" . htmlspecialchars($product['product_display_name']) . "' class='w-full'";
+                            // echo "src=" . htmlspecialchars($product['image']) . ">";
+                            // echo "<div class='mt-4'>";
+                            // echo "<h3 class='text-gray-700 font-bold'> " . htmlspecialchars($product['product_display_name']) . "</h3>";
+                            // echo "<p class='text-gray-500'>$" . htmlspecialchars($product['price']) . "</p>";
+                            // // echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
+                            // echo "<button class='mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 transition-all'>";
+                            // echo "Add to Cart";
+                            // echo "</button>";
+                            // echo "</div>";
+                            // echo "</div>";
+
+                            echo "<div class='max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 p-4'>";
+                            echo "<img alt='" . htmlspecialchars($product['product_display_name']) . "' class='w-full h-64 object-contain rounded-md'";
+                            echo "src='" . htmlspecialchars($product['image']) . "'>";
+
+
+
+                            echo "<div class='mt-4 text-center'>";
+                            echo "<h3 class='text-gray-800 font-semibold text-lg'>" . htmlspecialchars($product['product_display_name']) . "</h3>";
+                            echo "<p class='text-gray-600 text-xl font-bold'>$" . htmlspecialchars($product['price']) . "</p>";
+
+                            // Uncomment this if you want to display the description
+                            // echo "<p class='text-gray-700 font-medium'>" . htmlspecialchars($product['description']) . "</p>";
+
+                            echo "<button class='mt-4 px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
+                            echo "🛒 Add to Cart";
                             echo "</button>";
                             echo "</div>";
                             echo "</div>";
+
+                            
                         }
                     } else {
                         echo "<p>No products available.</p>";
