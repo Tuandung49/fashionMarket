@@ -100,3 +100,24 @@ button.update {
 #pagination button:hover:not(.active) {
     background: #f0f0f0;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: sans-serif;
+}
+
+th {
+    background-color: #4169e1;
+    color: white;
+}
+
+td {
+    background-color: white;
+}
