@@ -96,66 +96,12 @@ include '../layouts/head.php';
         </div>
 
         <div class="flex relative z-0">
-            <!-- Filters -->
-            <aside class="w-1/4 pr-8">
-                <h2 class="text-lg font-bold mb-4">
-                    Filters
-                </h2>
-                <div class="space-y-4">
 
-                    <!-- Dropdown Filter -->
-                    <div class="mb-6">
-                        <label for="filter" class="block text-gray-700 font-medium mb-2">Select Category:</label>
-                        <select id="filter"
-                            class="block w-64 px-4 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring focus:ring-blue-300">
-                            <option value="all">All</option>
-                            <option value="category1">Category 1</option>
-                            <option value="category2">Category 2</option>
-                            <option value="category3">Category 3</option>
-                            <option value="category4">Category 4</option>
-                            <option value="category5">Category 5</option>
-                        </select>
-                    </div>
+            <!-- Product Filter -->
+            <?php
+            include '../homePage/filter.php'
+            ?>
 
-                    <!-- Dropdown Filter -->
-                    <div class="mb-6">
-                        <label for="filter" class="block text-gray-700 font-medium mb-2">Select Category:</label>
-                        <select id="filter"
-                            class="block w-64 px-4 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring focus:ring-blue-300">
-                            <option value="all">All</option>
-                            <option value="category1">Category 1</option>
-                            <option value="category2">Category 2</option>
-                            <option value="category3">Category 3</option>
-                            <option value="category4">Category 4</option>
-                            <option value="category5">Category 5</option>
-                        </select>
-                    </div>
-
-                    <!-- Dropdown Filter -->
-                    <form method="GET" class="mb-6">
-                        <label for="filter" class="block text-gray-700 font-medium mb-2">Select Category:</label>
-                        <select id="filter" name="category"
-                            class="block w-64 px-4 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring focus:ring-blue-300">
-                            <option value="all">All</option>
-                            <option value="Beige">Beige</option>
-                            <option value="Black">Black</option>
-                            <option value="Blue">Blue</option>
-                            <option value="Brown">Brown</option>
-                            <option value="Green">Green</option>
-                            <option value="Grey">Category 5</option>
-                            <option value="Maroon">Category 5</option>
-                            <option value="Navy Blue">Category 5</option>
-                            <option value="Orange">Category 5</option>
-                            <option value="Pink">Category 5</option>
-
-                        </select>
-                        <button type="submit" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">
-                            Apply
-                        </button>
-                    </form>
-
-                </div>
-            </aside>
             <!-- Product Grid -->
             <section class="w-3/4">
                 <h2 class="text-lg font-bold mb-6">
@@ -180,26 +126,50 @@ include '../layouts/head.php';
                             // echo "</div>";
                             // echo "</div>";
 
+                            // echo "<div class='max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 p-4'>";
+                            // echo "<img alt='" . htmlspecialchars($product['product_display_name']) . "' class='w-full h-64 object-contain rounded-md'";
+                            // echo "src='" . htmlspecialchars($product['image']) . "'>";
+
+
+
+                            // echo "<div class='mt-4 text-center'>";
+                            // echo "<h3 class='text-gray-800 font-semibold text-lg'>" . htmlspecialchars($product['product_display_name']) . "</h3>";
+                            // echo "<p class='text-gray-600 text-xl font-bold'>$" . htmlspecialchars($product['price']) . "</p>";
+
+                            // // Uncomment this if you want to display the description
+                            // // echo "<p class='text-gray-700 font-medium'>" . htmlspecialchars($product['description']) . "</p>";
+
+                            // echo "<button class='mt-4 px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
+                            // echo "🛒 Add to Cart";
+                            // echo "</button>";
+                            // echo "</div>";
+                            // echo "</div>";
+
+
+
+                            ////
+
+
+
                             echo "<div class='max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 p-4'>";
-                            echo "<img alt='" . htmlspecialchars($product['product_display_name']) . "' class='w-full h-64 object-contain rounded-md'";
-                            echo "src='" . htmlspecialchars($product['image']) . "'>";
 
-
-
+                            // Product details area wrapped in a link to the product overview page
+                            echo "<a href='../detailsPage/productdetails.php?id=" . htmlspecialchars($product['product_id']) . "' class='block'>";
+                            echo "<img alt='" . htmlspecialchars($product['product_display_name']) . "' class='w-full h-64 object-contain rounded-md' src='" . htmlspecialchars($product['image']) . "'>";
                             echo "<div class='mt-4 text-center'>";
                             echo "<h3 class='text-gray-800 font-semibold text-lg'>" . htmlspecialchars($product['product_display_name']) . "</h3>";
                             echo "<p class='text-gray-600 text-xl font-bold'>$" . htmlspecialchars($product['price']) . "</p>";
+                            echo "</div>";
+                            echo "</a>";
 
-                            // Uncomment this if you want to display the description
-                            // echo "<p class='text-gray-700 font-medium'>" . htmlspecialchars($product['description']) . "</p>";
-
-                            echo "<button class='mt-4 px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
+                            // Add to Cart button linking directly to the cart page
+                            echo "<div class='mt-4 text-center'>";
+                            echo "<a href='../cart.php?id=" . htmlspecialchars($product['product_id']) . "' class='inline-block px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
                             echo "🛒 Add to Cart";
-                            echo "</button>";
-                            echo "</div>";
+                            echo "</a>";
                             echo "</div>";
 
-                            
+                            echo "</div>";
                         }
                     } else {
                         echo "<p>No products available.</p>";

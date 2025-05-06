@@ -5,12 +5,21 @@
 <!-- Header -->
 <header class="bg-white shadow-md">
     <div class="container mx-auto px-4 flex items-center justify-between py-4">
-        <div class="text-2xl font-bold">
+        <!-- <div class="text-2xl font-bold">
             Fashion.
             <span class="text-sm font-normal">
                 Market
             </span>
-        </div>
+        </div> -->
+        <a href="../homePage/HomePage.php" class="block">
+            <div class="text-2xl font-bold">
+                Fashion.
+                <span class="text-sm font-normal">
+                    Market
+                </span>
+            </div>
+        </a>
+
         <nav class="flex space-x-6 text-gray-700">
             <a class="hover:text-green-700" href="#">
                 Collection
@@ -61,19 +70,20 @@
            focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2">
                         👤 Account
                     </a>
-                <?php else: ?>
-                    <!-- If not logged in, display login button -->
-                    <a href="../loginpage/index.php"
-                        class="text-gray-700 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none 
-           focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
-                        🔐 Login
-                    </a>
 
                     <!-- If logged in, display logout button -->
                     <a href="../loginpage/logout.php"
                         class="text-gray-700 bg-red-500 hover:bg-blue-800 focus:ring-4 focus:outline-none 
            focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
                         Logout
+                    </a>
+
+                <?php else: ?>
+                    <!-- If not logged in, display login button -->
+                    <a href="../loginpage/index.php"
+                        class="text-gray-700 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none 
+           focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
+                        🔐 Login
                     </a>
 
                 <?php endif; ?>
