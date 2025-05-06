@@ -6,6 +6,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header style="background-color: #4caf50; padding: 10px;">
+    <nav style="display: flex; gap: 20px;">
+        <a href="C:\xampp\htdocs\fashionMarket\homePage\HomePage.php" style="color: white; text-decoration: none; font-weight: bold;">🏠 Trang chủ</a>
+        <a href="myorder.php" style="color: white; text-decoration: none; font-weight: bold;">📦 Đơn hàng của tôi</a>
+    </nav>
+</header>
 
 <?php
 require 'config.php';
