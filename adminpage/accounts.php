@@ -4,7 +4,7 @@ include 'connect.php';
 $search = $_GET['search'] ?? '';
 $role = $_GET['role'] ?? 'all';
 
-$sql = "SELECT * FROM accounts WHERE 1=1"; // luôn đúng
+$sql = "SELECT * FROM user WHERE 1=1"; // luôn đúng
 $params = []; // khởi tạo mảng
 
 if (!empty($search)) {
@@ -28,11 +28,11 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-$accounts = [];
+$user = [];
 while ($row = $result->fetch_assoc()) {
-    $accounts[] = $row;
+    $user[] = $row;
 }
 
 header('Content-Type: application/json');
-echo json_encode($accounts);
+echo json_encode($user);
 ?>

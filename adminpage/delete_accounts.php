@@ -4,7 +4,7 @@ include 'connect.php';
 $id = $_POST['id'] ?? null;
 
 if ($id) {
-    $stmt = $conn->prepare("DELETE FROM accounts WHERE id = ?");
+    $stmt = $conn->prepare("DELETE FROM user WHERE id = ?");
     $stmt->bind_param("i", $id);
     
     if ($stmt->execute()) {
