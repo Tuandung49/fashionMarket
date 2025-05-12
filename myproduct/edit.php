@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lý sản phẩm</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
 </head>
 <body></body>
 <?php
 require 'config.php';
 
 $id = $_GET['id'];
-$product = $conn->query("SELECT * FROM products WHERE product_id = $id")->fetch_assoc();
+$product = $conn->query("SELECT * FROM product_instock WHERE product_id = $id")->fetch_assoc();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['product_display_name'];
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($_FILES['image']['tmp_name'], "uploads/" . $image);
     }
 
-    $stmt = $conn->prepare("UPDATE products SET product_display_name=?, description=?, quantity=?, price=?, colour=?, image=? WHERE product_id=?");
+    $stmt = $conn->prepare("UPDATE product_instock SET product_display_name=?, description=?, quantity=?, price=?, colour=?, image=? WHERE product_id=?");
     $stmt->bind_param("ssidsii", $name, $desc, $qty, $price, $colour, $image, $id);
     $stmt->execute();
     header("Location: index.php");

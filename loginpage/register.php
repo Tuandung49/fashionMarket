@@ -1,5 +1,5 @@
 <?php
-require 'db.php';
+require '../config/db.php';
 
 $fullname = $_POST['fullname'];
 $username = $_POST['username'];
@@ -15,7 +15,7 @@ $stmt->bind_param("ssss", $fullname, $username, $email, $password);
 if ($stmt->execute()) {
     echo "success";
 } else {
-    http_response_code(401)
+    http_response_code(401);
     echo "Lỗi: " . $stmt->error;
 }
 ?>

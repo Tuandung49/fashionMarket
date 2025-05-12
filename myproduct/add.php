@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lý sản phẩm</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
 </head>
 <body></body>
 <?php
@@ -14,14 +14,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $qty = $_POST['quantity'];
     $price = $_POST['price'];
     $colour = $_POST['colour'];
-    $image = $_FILES['image']['name'];
+    $image = trim($_POST['image']);
 
-    move_uploaded_file($_FILES['image']['tmp_name'], "uploads/" . $image);
-
-    $stmt = $conn->prepare("INSERT INTO products (product_display_name, description, quantity, price, colour, image) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssidss", $name, $desc, $qty, $price, $colour, $image);
-    $stmt->execute();
-    header("Location: index.php");
+    // Kiểm tra nếu URL ảnh là hợp lệ (tùy chọn, có thể bỏ)
+    if (!filter_var($image, FILTER_VALIDATE_URL)) {
+        echo "<p style='color:red'>Link ảnh không hợp lệ!</p>";
+    } else {
+        $stmt = $conn->prepare("INSERT INTO product_instock (product_display_name, description, quantity, price, colour, image) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssidss", $name, $desc, $qty, $price, $colour, $image);
+        $stmt->execute();
+        header("Location: index.php");
+        exit;
+    }
 }
 ?>
 
@@ -32,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Số lượng: <input type="number" name="quantity"><br>
     Giá: <input type="text" name="price"><br>
     Màu: <input name="colour"><br>
-    Ảnh: <input type="file" name="image"><br>
+    Ảnh: <input type="text" name="image" placeholder="http://..." required><br>
     <button type="submit">Thêm</button>
 </form>
 <a href="index.php">Quay lại</a>

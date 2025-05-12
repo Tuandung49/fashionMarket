@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lý sản phẩm</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style1.css">
 </head>
-<body></body>
+<body>
+<header style="background-color: #4caf50; padding: 10px;">
+    <nav style="display: flex; gap: 20px;">
+        <a href="../homePage/HomePage.php" style="color: white; text-decoration: none; font-weight: bold;">🏠 Trang chủ</a>
+        <a href="myorder.php" style="color: white; text-decoration: none; font-weight: bold;">📦 Đơn hàng của tôi</a>
+    </nav>
+</header>
+</body>
 <?php
 require 'config.php';
 
@@ -16,9 +23,23 @@ $allowed = ['product_display_name', 'quantity', 'price'];
 $sort = in_array($sort, $allowed) ? $sort : 'product_id';
 $order = ($order === 'desc') ? 'desc' : 'asc';
 
-$sql = "SELECT * FROM products ORDER BY $sort $order";
+$sql = "SELECT * FROM product_instock ORDER BY $sort $order";
 $result = $conn->query($sql);
 
+// Phân trang
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+// Tổng số sản phẩm
+$total_result = $conn->query("SELECT COUNT(*) AS total FROM product_instock");
+$total_row = $total_result->fetch_assoc();
+$total_products = $total_row['total'];
+$total_pages = ceil($total_products / $limit);
+
+// Truy vấn có sắp xếp và phân trang
+$sql = "SELECT * FROM product_instock ORDER BY $sort $order LIMIT $limit OFFSET $offset";
+$result = $conn->query($sql);
 function sort_link($field, $label, $current_sort, $current_order) {
     $next_order = ($current_sort === $field && $current_order === 'asc') ? 'desc' : 'asc';
     return "<a href='?sort=$field&order=$next_order'>$label</a>";
@@ -53,7 +74,7 @@ function sort_link($field, $label, $current_sort, $current_order) {
         <td><?= htmlspecialchars($row['colour']) ?></td>
         <td>
             <?php if (!empty($row['image'])): ?>
-                <img src="uploads/<?= htmlspecialchars($row['image']) ?>" width="60">
+                <img src="<?= htmlspecialchars($row['image']) ?>" width="60">
             <?php else: ?>
                 Không có ảnh
             <?php endif; ?>
@@ -65,3 +86,20 @@ function sort_link($field, $label, $current_sort, $current_order) {
     </tr>
     <?php endwhile; ?>
 </table>
+
+
+<!-- Hiển thị phân trang -->
+<div style="margin-top: 20px;">
+    <strong>Trang:</strong>
+    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+        <?php if ($i == $page): ?>
+            <strong><?= $i ?></strong>
+        <?php else: ?>
+            <a href="?sort=<?= $sort ?>&order=<?= $order ?>&page=<?= $i ?>"><?= $i ?></a>
+        <?php endif; ?>
+        <?php if ($i < $total_pages): ?> | <?php endif; ?>
+    <?php endfor; ?>
+</div>
+
+</body>
+</html>
