@@ -34,12 +34,12 @@ function renderTable() {
     pageData.forEach(account => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${account.name}</td>
+            <td>${account.first_name} ${account.last_name}</td>
             <td>${account.email}</td>
             <td>${account.role}</td>
             <td>
-                <button onclick="edit('${account.id}')">Edit</button>
-                <button onclick="remove('${account.id}')">Delete</button>
+                <button onclick="edit('${account.user_id}')">Edit</button>
+                <button onclick="remove('${account.user_id}')">Delete</button>
             </td>
         `;
         tableBody.appendChild(row);
@@ -91,11 +91,11 @@ function renderPagination() {
     }
 }
 
-function edit(id) {
+function edit(userId) {
     alert("Edit user " + id);
 }
 
-function remove(id) {
+function remove(userId) {
     alert("Delete user " + id);
 }
 
@@ -103,14 +103,14 @@ window.onload = function () {
     fetchAccounts();
 }
 
-function remove(id) {
+function remove(userId) {
     if (confirm("Bạn có chắc chắn muốn xóa tài khoản này không?")) {
         fetch("delete_accounts.php", {  // Sửa tên file thành delete_accounts.php
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            body: `id=${id}`,
+            body: `user_id=${userId}`,
         })
             .then((res) => res.text())
             .then((msg) => {
@@ -126,7 +126,7 @@ function remove(id) {
 }
 
 
-function edit(id) {
+function edit(userId) {
     const newRole = prompt("Nhập role mới (buyer hoặc seller):").toLowerCase();
 
     if (newRole !== 'buyer' && newRole !== 'seller') {
@@ -139,7 +139,7 @@ function edit(id) {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `id=${id}&role=${newRole}`
+        body: `user_id=${userId}&role=${newRole}`
     })
         .then(res => res.text())
         .then(msg => {

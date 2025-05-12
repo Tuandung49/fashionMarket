@@ -8,7 +8,8 @@ $sql = "SELECT * FROM user WHERE 1=1"; // luôn đúng
 $params = []; // khởi tạo mảng
 
 if (!empty($search)) {
-    $sql .= " AND (name LIKE ? OR email LIKE ?)";
+    $sql .= " AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ?)";
+    $params[] = "%$search%";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
@@ -35,4 +36,3 @@ while ($row = $result->fetch_assoc()) {
 
 header('Content-Type: application/json');
 echo json_encode($user);
-?>
