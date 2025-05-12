@@ -1,12 +1,17 @@
-
 <?php
 include 'connect.php';
 
 $search = $_GET['search'] ?? '';
 $role = $_GET['role'] ?? 'all';
 
-$sql = "SELECT * FROM accounts WHERE (name LIKE ? OR email LIKE ?)";
-$params = ["%$search%", "%$search%"];
+$sql = "SELECT * FROM accounts WHERE 1=1"; // luôn đúng
+$params = []; // khởi tạo mảng
+
+if (!empty($search)) {
+    $sql .= " AND (name LIKE ? OR email LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+}
 
 if ($role !== 'all') {
     $sql .= " AND role = ?";
@@ -14,8 +19,12 @@ if ($role !== 'all') {
 }
 
 $stmt = $conn->prepare($sql);
-$types = str_repeat('s', count($params));
-$stmt->bind_param($types, ...$params);
+
+if (!empty($params)) {
+    $types = str_repeat('s', count($params));
+    $stmt->bind_param($types, ...$params);
+}
+
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -24,5 +33,6 @@ while ($row = $result->fetch_assoc()) {
     $accounts[] = $row;
 }
 
+header('Content-Type: application/json');
 echo json_encode($accounts);
 ?>

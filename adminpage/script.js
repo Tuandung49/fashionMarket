@@ -1,4 +1,3 @@
-
 let accounts = [];
 let currentPage = 1;
 const itemsPerPage = 5;
@@ -104,3 +103,51 @@ window.onload = function () {
     fetchAccounts();
 }
 
+function remove(id) {
+    if (confirm("Bạn có chắc chắn muốn xóa tài khoản này không?")) {
+        fetch("delete_accounts.php", {  // Sửa tên file thành delete_accounts.php
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `id=${id}`,
+        })
+            .then((res) => res.text())
+            .then((msg) => {
+                if (msg === "success") {
+                    alert("Xóa thành công!");
+                    fetchAccounts(); // Cập nhật lại bảng
+                } else {
+                    alert(`Xóa thất bại! Lỗi: ${msg}`); // Hiển thị lỗi từ server
+                }
+            })
+            .catch((error) => console.error("Lỗi:", error));
+    }
+}
+
+
+function edit(id) {
+    const newRole = prompt("Nhập role mới (buyer hoặc seller):").toLowerCase();
+
+    if (newRole !== 'buyer' && newRole !== 'seller') {
+        alert("Giá trị role không hợp lệ!");
+        return;
+    }
+
+    fetch("update_role.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `id=${id}&role=${newRole}`
+    })
+        .then(res => res.text())
+        .then(msg => {
+            if (msg === "success") {
+                alert("Cập nhật thành công!");
+                fetchAccounts(); // Refresh danh sách
+            } else {
+                alert("Cập nhật thất bại!");
+            }
+        });
+}
