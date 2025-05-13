@@ -34,11 +34,11 @@ function renderTable() {
     pageData.forEach(account => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${account.first_name} ${account.last_name}</td>
+            <td>${account.name}</td>
             <td>${account.email}</td>
             <td>${account.role}</td>
             <td>
-                <button onclick="edit('${account.user_id}')">Edit</button>
+                <button onclick="edit('${account.user_id}')">Edit</button> 
                 <button onclick="remove('${account.user_id}')">Delete</button>
             </td>
         `;
@@ -91,63 +91,62 @@ function renderPagination() {
     }
 }
 
-function edit(userId) {
-    alert("Edit user " + id);
-}
 
-function remove(userId) {
-    alert("Delete user " + id);
-}
 
 window.onload = function () {
     fetchAccounts();
 }
 
 function remove(userId) {
-    if (confirm("Bạn có chắc chắn muốn xóa tài khoản này không?")) {
-        fetch("delete_accounts.php", {  // Sửa tên file thành delete_accounts.php
+    if (confirm("Bạn có chắc chắn muốn xóa?")) {
+        // Đảm bảo userId là số
+        const numericId = parseInt(userId);
+        if (isNaN(numericId)) {
+            alert("ID không hợp lệ!");
+            return;
+        }
+        // Sử dụng FormData để chuẩn hóa dữ liệu
+        const formData = new FormData();
+        formData.append('id', numericId);
+
+        fetch("delete_accounts.php", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: `user_id=${userId}`,
+            body: formData // Không cần header khi dùng FormData
         })
-            .then((res) => res.text())
-            .then((msg) => {
-                if (msg === "success") {
-                    alert("Xóa thành công!");
-                    fetchAccounts(); // Cập nhật lại bảng
-                } else {
-                    alert(`Xóa thất bại! Lỗi: ${msg}`); // Hiển thị lỗi từ server
-                }
-            })
-            .catch((error) => console.error("Lỗi:", error));
+        .then(res => res.text())
+        .then(msg => {
+            console.log("Response:", msg);
+            if (msg.trim() === "success") {
+                alert("Xóa thành công!");
+                fetchAccounts();
+            } else {
+                alert(`Lỗi: ${msg}`);
+            }
+        })
+        .catch(err => console.error("Lỗi:", err));
     }
 }
 
-
 function edit(userId) {
-    const newRole = prompt("Nhập role mới (buyer hoặc seller):").toLowerCase();
+    const currentRole = accounts.find(acc => acc.user_id == userId)?.role; // Lấy role hiện tại
+    const newRole = prompt(`Nhập role mới (current: ${currentRole}):\n(buyer hoặc seller)`, currentRole)?.toLowerCase();
 
-    if (newRole !== 'buyer' && newRole !== 'seller') {
-        alert("Giá trị role không hợp lệ!");
+    if (!newRole || !['buyer', 'seller'].includes(newRole)) {
+        alert("Role phải là 'buyer' hoặc 'seller'");
         return;
     }
 
     fetch("update_role.php", {
         method: "POST",
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: `user_id=${userId}&role=${newRole}`
+        body: `id=${userId}&role=${newRole}`
     })
         .then(res => res.text())
         .then(msg => {
-            if (msg === "success") {
-                alert("Cập nhật thành công!");
-                fetchAccounts(); // Refresh danh sách
-            } else {
-                alert("Cập nhật thất bại!");
-            }
-        });
+            alert(msg.includes("success") ? "Thành công!" : msg);
+            if (msg.includes("success")) fetchAccounts();
+        })
+        .catch(err => alert("Lỗi kết nối: " + err));
 }
