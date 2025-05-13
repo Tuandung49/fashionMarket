@@ -3,7 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <title>Đăng nhập & Đăng ký</title>
-  
+  <script>
+    function switchTab(tab) {
+      document.getElementById('form-login').classList.remove('active');
+      document.getElementById('form-register').classList.remove('active');
+      document.getElementById('tab-login').classList.remove('active');
+      document.getElementById('tab-register').classList.remove('active');
+
+      document.getElementById(`form-${tab}`).classList.add('active');
+      document.getElementById(`tab-${tab}`).classList.add('active');
+    }
+
+    const pass = document.getElementById('pass');
+    const repass = document.getElementById('repass');
+    const msg = document.getElementById('msg');
+
+    repass.addEventListener('input', () => {
+      if (repass.value === "") {
+        repass.classList.remove('valid', 'invalid');
+        msg.style.display = "none";
+        return;
+      }
+
+      if (repass.value === pass.value) {
+        repass.classList.add('valid');
+        repass.classList.remove('invalid');
+        msg.style.display = "none";
+      } else {
+        repass.classList.add('invalid');
+        repass.classList.remove('valid');
+        msg.style.display = "block";
+      }
+    });
+    function loginSubmit(e){
+      e.stopPropagation();
+      e.preventDefault();
+      console.log(e.target)
+      const formData = new FormData(e.target);
+
+      fetch('login.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => {
+        console.log(res.status)
+        if (res.status === 200){
+          return res.text();
+        }
+        throw new Error(res.statusText)
+      })
+      // .then(res => res.text())
+      .then(data => {
+        window.location.href = '../accountpage/account.php';
+      })
+      .catch(e => alert(e.message));
+    }
+    function validateRegister() {
+      if (pass.value !== repass.value) {
+        msg.style.display = "block";
+        return false;
+      }
+      return true;
+    }
+  </script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
