@@ -16,7 +16,7 @@ if (empty($fullname) || empty($email)) {
     exit;
 }
 
-$sql = "UPDATE users SET fullname = ?, email = ? WHERE username = ?";
+$sql = "UPDATE user SET fullname = ?, email = ? WHERE username = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("sss", $fullname, $email, $username);
 

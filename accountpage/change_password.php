@@ -17,7 +17,7 @@ if (empty($old) || empty($new)) {
 }
 
 // Kiểm tra mật khẩu cũ
-$stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+$stmt = $conn->prepare("SELECT password FROM user WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -30,7 +30,7 @@ if (!$user || !password_verify($old, $user['password'])) {
 
 // Cập nhật mật khẩu mới
 $newHashed = password_hash($new, PASSWORD_DEFAULT);
-$stmt = $conn->prepare("UPDATE users SET password = ? WHERE username = ?");
+$stmt = $conn->prepare("UPDATE user SET password = ? WHERE username = ?");
 $stmt->bind_param("ss", $newHashed, $username);
 $stmt->execute();
 

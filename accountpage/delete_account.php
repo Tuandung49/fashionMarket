@@ -10,7 +10,7 @@ if (!isset($_SESSION['username'])) {
 $username = $_SESSION['username'];
 
 // Xóa tài khoản
-$stmt = $conn->prepare("DELETE FROM users WHERE username = ?");
+$stmt = $conn->prepare("DELETE FROM user WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 
