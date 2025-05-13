@@ -9,7 +9,7 @@ if (!isset($_SESSION['username'])) {
 
 $username = $_SESSION['username'];
 
-$stmt = $conn->prepare("SELECT fullname, email FROM users WHERE username = ?");
+$stmt = $conn->prepare("SELECT fullname, email FROM user WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
