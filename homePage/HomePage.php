@@ -124,7 +124,7 @@ include '../layouts/head.php';
 
                             // Add to Cart button linking directly to the cart page
                             echo "<div class='mt-4 text-center'>";
-                            echo "<a href='../cart.php?id=" . htmlspecialchars($product['product_id']) . "' class='inline-block px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
+                            echo "<a href='../cartpage/cart.php?id=" . htmlspecialchars($product['product_id']) . "' class='inline-block px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
                             echo "🛒 Add to Cart";
                             echo "</a>";
                             echo "</div>";

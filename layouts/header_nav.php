@@ -40,7 +40,7 @@
             </div> -->
 
             <div>
-                <a href="cart.php"
+                <a href="../cartpage/cart.php"
                     class="text-gray-700 bottom-2.5 bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none 
         focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 flex items-center">
                     🛒 Cart
