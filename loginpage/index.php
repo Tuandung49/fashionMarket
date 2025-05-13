@@ -54,7 +54,7 @@
       })
       // .then(res => res.text())
       .then(data => {
-        window.location.href = '../accountpage/account.php';
+        window.location.href = '../homePage/HomePage.php';
       })
       .catch(e => alert(e.message));
     }

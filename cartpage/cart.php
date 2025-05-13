@@ -57,10 +57,10 @@ if (isset($_GET['action'])) {
 </head>
 <body>
 
-    <h1>🛒 Giỏ hàng của bạn</h1>
+    <h1>Giỏ hàng của bạn</h1>
 
     <?php if (empty($_SESSION['cart'])): ?>
-        <p>Giỏ hàng đang trống. <a href="..//homePage//HomePage.php">Tiếp tục mua sắm</a></p>
+        <p>Giỏ hàng đang trống. <a href="../homePage/HomePage.php">Tiếp tục mua sắm</a></p>
     <?php else: ?>
         <table>
             <tr>
