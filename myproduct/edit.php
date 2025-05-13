@@ -18,12 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $qty = $_POST['quantity'];
     $price = $_POST['price'];
     $colour = $_POST['colour'];
-    $image = $product['image'];
-
-    if ($_FILES['image']['name']) {
-        $image = $_FILES['image']['name'];
-        move_uploaded_file($_FILES['image']['tmp_name'], "uploads/" . $image);
-    }
+    $image = $_POST['image'];
 
     $stmt = $conn->prepare("UPDATE product_instock SET product_display_name=?, description=?, quantity=?, price=?, colour=?, image=? WHERE product_id=?");
     $stmt->bind_param("ssidsii", $name, $desc, $qty, $price, $colour, $image, $id);
@@ -39,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Số lượng: <input type="number" name="quantity" value="<?= $product['quantity'] ?>"><br>
     Giá: <input type="text" name="price" value="<?= $product['price'] ?>"><br>
     Màu: <input name="colour" value="<?= $product['colour'] ?>"><br>
-    Ảnh: <input type="file" name="image"><br>
-    <img src="uploads/<?= $product['image'] ?>" width="80"><br>
+    Ảnh: <input type="text" name="image" value="<?= htmlspecialchars($product['image']) ?>"><br>
+    <img src="<?= htmlspecialchars($product['image']) ?>" width="80"><br>
     <button type="submit">Cập nhật</button>
 </form>
 <a href="index.php">Quay lại</a>
