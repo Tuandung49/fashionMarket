@@ -1,0 +1,90 @@
+header {
+    background-color: #4caf50;
+    padding: 10px 20px;
+}
+
+header nav {
+    display: flex;
+    gap: 20px;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f6fff6;
+    color: #2e2e2e;
+}
+
+h2 {
+    color: #2e7d32; /* xanh lá đậm */
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #388e3c; /* xanh lá trung bình */
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #1b5e20; /* xanh lá đậm hơn */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 0 8px rgba(0, 128, 0, 0.1);
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #c8e6c9;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #e8f5e9;
+    font-weight: bold;
+    color: #1b5e20;
+}
+
+form {
+    margin-bottom: 15px;
+}
+
+input[type="text"] {
+    padding: 6px;
+    width: 200px;
+    border: 1px solid #a5d6a7;
+    border-radius: 4px;
+}
+
+button {
+    padding: 6px 12px;
+    background-color: #4caf50; /* xanh lá */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #388e3c;
+}
+
+img {
+    border-radius: 4px;
+    max-height: 60px;
+    object-fit: cover;
+}
