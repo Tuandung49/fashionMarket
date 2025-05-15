@@ -47,6 +47,38 @@ if ($result_bsl->num_rows > 0) {
     }
 }
 
+
+$sort = $_GET['sort'] ?? 'product_id';
+$order = $_GET['order'] ?? 'asc';
+
+$allowed = ['product_display_name', 'quantity', 'price'];
+$sort = in_array($sort, $allowed) ? $sort : 'product_id';
+$order = ($order === 'desc') ? 'desc' : 'asc';
+
+$sql = "SELECT * FROM product_instock ORDER BY $sort $order";
+$result = $conn->query($sql);
+
+// Phân trang
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+// Tổng số sản phẩm
+$total_result = $conn->query("SELECT COUNT(*) AS total FROM product_instock");
+$total_row = $total_result->fetch_assoc();
+$total_products = $total_row['total'];
+$total_pages = ceil($total_products / $limit);
+
+// Truy vấn có sắp xếp và phân trang
+$sql = "SELECT * FROM product_instock ORDER BY $sort $order LIMIT $limit OFFSET $offset";
+$result = $conn->query($sql);
+function sort_link($field, $label, $current_sort, $current_order)
+{
+    $next_order = ($current_sort === $field && $current_order === 'asc') ? 'desc' : 'asc';
+    return "<a href='?sort=$field&order=$next_order'>$label</a>";
+}
+
+
 // Close the connection
 $conn->close();
 ?>
@@ -178,6 +210,19 @@ include '../layouts/head.php';
                 </div>
 
 
+
+                <!-- Hiển thị phân trang -->
+                <div style="margin-top: 20px;">
+                    <strong>Trang:</strong>
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <?php if ($i == $page): ?>
+                            <strong><?= $i ?></strong>
+                        <?php else: ?>
+                            <a href="?sort=<?= $sort ?>&order=<?= $order ?>&page=<?= $i ?>"><?= $i ?></a>
+                        <?php endif; ?>
+                        <?php if ($i < $total_pages): ?> | <?php endif; ?>
+                    <?php endfor; ?>
+                </div>
                 <!-- Pagination -->
                 <div class="mt-4">
                     <nav aria-label="Page navigation flex justify-center items-center">
