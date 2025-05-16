@@ -1,13 +1,16 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "fashionmarket";
-$conn = new mysqli($servername, $username, $password, $database);
+session_start();
+require '../config/db.php';
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+
+$username = $_SESSION['username'];
+
+$stmt = $conn->prepare("SELECT fullname, email FROM user WHERE username = ?");
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
 
 // Pagination & Filter & Search
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
@@ -117,7 +120,7 @@ include '../layouts/head.php';
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
 
-    <!-- search -->
+        <!-- search -->
         <!-- <form class="max-w-128 mx-auto">
             <label for="default-search"
                 class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>

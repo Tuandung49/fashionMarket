@@ -63,9 +63,9 @@
 
             <!-- Login/account button -->
             <div>
-                <?php if (isset($_SESSION['user_id'])): ?>
+                <?php if (isset($_SESSION['username'])): ?>
                     <!-- If logged in, display Account button -->
-                    <span class="mr-4 text-green-600">Xin chào, <?= htmlspecialchars($_SESSION['fullname']) ?></span>
+                    <span class="mr-4 text-green-600">Xin chào, <?= htmlspecialchars($_SESSION['username']) ?></span>
                     <a href="../accountpage/account.php"
                         class="text-gray-700 bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none 
            focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2">

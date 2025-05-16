@@ -63,7 +63,7 @@
 
             <!-- Login/account button -->
             <div>
-                <?php if (isset($_SESSION['user_id'])): ?>
+                <?php if (isset($_SESSION['username'])): ?>
                     <!-- If logged in, display Account button -->
                     <a href="../accountpage/account.php"
                         class="text-gray-700 bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none 
