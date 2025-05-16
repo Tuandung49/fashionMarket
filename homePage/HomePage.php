@@ -1,10 +1,12 @@
 <?php
 session_start();
-require '../config/db.php';
+require_once __DIR__ . '/../config/db.php';
 
 
-$username = $_SESSION['username'];
-
+// if (isset($_SESSION['username'])) {
+//     $username = $_SESSION['username'];
+//     exit;
+// }
 $stmt = $conn->prepare("SELECT fullname, email FROM user WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
