@@ -1,7 +1,13 @@
 <?php
-session_start();
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "fashionmarket";
+$conn = new mysqli($servername, $username, $password, $database);
 
-
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 // Pagination & Filter & Search
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
