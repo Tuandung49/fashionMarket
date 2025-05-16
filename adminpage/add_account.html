@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>THÊM TÀI KHOẢN MỚI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="account-container">
+        <h1>Thêm tài khoản mới</h1>
+
+        <form id="accountForm" class="account-form">
+            <input type="hidden" id="accountType" name="accountType" value="seller">
+
+            <div class="form-group">
+                <label for="username">Tên đăng nhập <span class="required">(*)</span></label>
+                <input type="text" id="username" name="username" required minlength="4">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email <span class="required">(*)</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu <span class="required">(*)</span></label>
+                <input type="password" id="password" name="password" required minlength="6">
+            </div>
+
+
+            <div class="form-group">
+                <label for="last_name">Họ và tên đệm</label>
+                <input type="text" id="last_name" name="last_name">
+            </div>
+
+            <div class="form-group">
+                <label for="first_name">Tên <span class="required">(*)</span></label>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Giới tính</label>
+                <select name="gender" id="gender">
+                    <option value="1">Nam</option>
+                    <option value="0">Nữ</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="birth">Ngày sinh <span class="required">(*)</span></label>
+                <input type="date" id="birth" name="birth" required>
+            </div>
+
+            <div class="form-group level-group">
+                <label for="user_level">Cấp độ</label>
+                <input type="number" id="user_level" name="user_level" min="1" value="1">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">Thêm tài khoản</button>
+                <a href="manage_accounts.php" class="cancel-btn">Hủy bỏ</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Xử lý chuyển đổi giữa admin và seller
+        document.querySelectorAll('.type-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Cập nhật giao diện
+                document.querySelectorAll('.type-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // Cập nhật loại tài khoản
+                const type = this.getAttribute('data-type');
+                document.getElementById('accountType').value = type;
+
+                // Cập nhật user_type (0: buyer, 1: seller, 2: admin)
+                document.querySelector('input[name="user_type"]').value = type === 'admin' ? 2 : 1;
+            });
+        });
+
+        // Xử lý submit form
+        document.getElementById('accountForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Validate password
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password !== confirmPassword) {
+                alert('Mật khẩu không khớp!');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Mật khẩu phải có ít nhất 6 ký tự!');
+                return;
+            }
+
+            // Gửi dữ liệu
+            const formData = new FormData(this);
+
+            fetch('add_account.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Thêm tài khoản thành công!');
+                        window.location.href = 'manage_accounts.php';
+                    } else {
+                        alert('Lỗi: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Đã xảy ra lỗi khi thêm tài khoản');
+                });
+        });
+    </script>
+</body>
+
+</html>

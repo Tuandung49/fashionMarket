@@ -55,7 +55,7 @@ include '../layouts/header_nav.php'
                     <div>
                         <h1 class="text-3xl font-bold mb-3"><?= $product['product_display_name'] ?></h1>
                         <p class="text-gray-600 mb-3">MÃ SP: TSN<?= $product['product_id'] ?></p>
-                        <p class="text-xl font-bold mb-4">$<?= $product['price'] ?></p>
+                        <p class="text-xl font-bold mb-4"><?= $product['price'] ?></p>
                     </div>
                     <button class="text-2xl">❤️</button>
                 </div>
@@ -87,7 +87,7 @@ include '../layouts/header_nav.php'
                 </div>
 
                 <!-- Add to Cart Button -->
-                <button class="w-full bg-gray-900 text-white py-3 rounded-md hover:bg-gray-800 mb-6">
+                <button  class="w-full bg-gray-900 text-white py-3 rounded-md hover:bg-gray-800 mb-6">
                     THÊM VÀO GIỎ HÀNG
                 </button>
 

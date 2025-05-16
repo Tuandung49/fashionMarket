@@ -5,6 +5,12 @@
     <meta charset="UTF-8" />
     <title>ACCOUNT MANAGEMENT</title>
     <link rel="stylesheet" href="style.css" />
+    <div class="page-header">
+        <h1>Quản lý tài khoản</h1>
+        <div class="action-buttons">
+            <a href="add_account.html" class="add-btn">Thêm tài khoản</a>
+        </div>
+    </div>
 </head>
 
 <body>
@@ -18,21 +24,26 @@
             <label><input type="radio" name="role" value="all" checked onchange="filterAccounts()"> ALL </label>
             <label><input type="radio" name="role" value="buyer" onchange="filterAccounts()"> BUYER </label>
             <label><input type="radio" name="role" value="seller" onchange="filterAccounts()"> SELLER </label>
+            <label><input type="radio" name="role" value="admin" onchange="filterAccounts()"> ADMIN </label>
         </div>
     </div>
 
     <table class="account-table">
         <thead>
             <tr>
+                <th style="width: 60px; text-align: center">STT</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Actions</th>
+                <th style="width: 150px">Actions</th>
             </tr>
         </thead>
-        <tbody id="accountTableBody"></tbody>
+        <tbody id="accountTableBody">
+
+        </tbody>
     </table>
 
+    <form id="addAccountForm" class="account-form">
     <div id="pagination"></div>
 
     <script src="script.js"></script>

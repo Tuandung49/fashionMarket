@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "fashionmarket";
+$database = "fashionmarket"; // Replace with your database name
 
 // Create a connection
 $conn = new mysqli($servername, $username, $password, $database);
@@ -12,79 +12,31 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Handle Category Filter
-$category = isset($_GET['category']) ? $_GET['category'] : 'all';
-$query = "SELECT * FROM product_instock";
 
-if ($category !== 'all') {
-    $query .= " WHERE category = ? LIMIT 6";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $category);
-    $stmt->execute();
-    $result = $stmt->get_result();
-} else {
-    $query .= " LIMIT 6"; // Apply LIMIT when no category filter is used
-    $result = $conn->query($query);
-}
+$sql = "SELECT * FROM product_instock LIMIT 6"; // Replace 'products' with your table name
+$result = $conn->query($sql);
 
-// Fetch Products
-$products = [];
-$products_bsl = [];
+$products = []; // Initialize an empty array
+$products_bsl = []; // Initialize an empty array
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $products[] = $row;
+        $products[] = $row; // Add each product to the array
     }
 }
 
-// Fetch Best-Selling Products (Price DESC)
-$sql_bsl = "SELECT * FROM product_instock ORDER BY price DESC LIMIT 4";
-$result_bsl = $conn->query($sql_bsl);
+$sql = "SELECT * FROM product_instock ORDER BY price DESC LIMIT 4"; // Replace 'products' with your table name
+$result = $conn->query($sql);
 
-if ($result_bsl->num_rows > 0) {
-    while ($row = $result_bsl->fetch_assoc()) {
-        $products_bsl[] = $row;
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $products_bsl[] = $row; // Add each product to the array
     }
 }
-
-
-$sort = $_GET['sort'] ?? 'product_id';
-$order = $_GET['order'] ?? 'asc';
-
-$allowed = ['product_display_name', 'quantity', 'price'];
-$sort = in_array($sort, $allowed) ? $sort : 'product_id';
-$order = ($order === 'desc') ? 'desc' : 'asc';
-
-$sql = "SELECT * FROM product_instock ORDER BY $sort $order";
-$result = $conn->query($sql);
-
-// Phân trang
-$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-$limit = 10;
-$offset = ($page - 1) * $limit;
-
-// Tổng số sản phẩm
-$total_result = $conn->query("SELECT COUNT(*) AS total FROM product_instock");
-$total_row = $total_result->fetch_assoc();
-$total_products = $total_row['total'];
-$total_pages = ceil($total_products / $limit);
-
-// Truy vấn có sắp xếp và phân trang
-$sql = "SELECT * FROM product_instock ORDER BY $sort $order LIMIT $limit OFFSET $offset";
-$result = $conn->query($sql);
-function sort_link($field, $label, $current_sort, $current_order)
-{
-    $next_order = ($current_sort === $field && $current_order === 'asc') ? 'desc' : 'asc';
-    return "<a href='?sort=$field&order=$next_order'>$label</a>";
-}
-
 
 // Close the connection
 $conn->close();
 ?>
-
-
-
 
 
 <?php
@@ -123,68 +75,42 @@ include '../layouts/head.php';
         </form>
 
         <!-- Banner -->
-        <div class="bannerz-100 w-full h-64 bg-blue-300">
+        <div class="bannerz-100 w-full h-64 bg-black-300">
             <div class="w-full">
-                <img src="https://placehold.co/1920x300" alt="Banner" class="w-full h-100">
+                <img src="../image/1920x300_cates_banner_1.jpg  " alt="Banner" class="w-full h-100">
             </div>
         </div>
 
         <div class="flex relative z-0">
-
-            <!-- Product Filter -->
+            <!-- Filters -->
             <?php
             include '../homePage/filter.php'
             ?>
-
             <!-- Product Grid -->
             <section class="w-3/4">
                 <h2 class="text-lg font-bold mb-6">
                     6 Items
                 </h2>
-                <div class="grid grid-cols-3 gap-8">
-                    <!-- Product Card -->
 
+                <!-- Product Card -->
+
+                <div class="grid grid-cols-3 gap-8">
                     <?php
                     if (!empty($products)) {
                         foreach ($products as $product) {
-                            // echo "<div>";
-                            // echo "<img alt='" . htmlspecialchars($product['product_display_name']) . "' class='w-full'";
-                            // echo "src=" . htmlspecialchars($product['image']) . ">";
+                            // Wrap the entire product card in an anchor tag.
+                            // echo "<a href='../detailsPage/productdetails.php?id=" . htmlspecialchars($product['product_id']) . "' class='block'>";
+                            // echo "<div class='bg-white p-4 rounded-lg shadow hover:shadow-lg transition duration-200'>";
+                            // echo "<img alt='Elastic Waist Pants' class='w-full object-cover' src='" . htmlspecialchars($product['image']) . "'>";
                             // echo "<div class='mt-4'>";
-                            // echo "<h3 class='text-gray-700 font-bold'> " . htmlspecialchars($product['product_display_name']) . "</h3>";
-                            // echo "<p class='text-gray-500'>$" . htmlspecialchars($product['price']) . "</p>";
-                            // // echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
-                            // echo "<button class='mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 transition-all'>";
-                            // echo "Add to Cart";
-                            // echo "</button>";
+                            // echo "<h3 class='text-gray-700 font-bold'>" . htmlspecialchars($product['product_display_name']) . "</h3>";
+                            // echo "<p class='text-gray-500'>" . htmlspecialchars($product['price']) . "</p>";
+                            // echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
                             // echo "</div>";
                             // echo "</div>";
+                            // echo "</a>";
 
-                            // echo "<div class='max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 p-4'>";
-                            // echo "<img alt='" . htmlspecialchars($product['product_display_name']) . "' class='w-full h-64 object-contain rounded-md'";
-                            // echo "src='" . htmlspecialchars($product['image']) . "'>";
-
-
-
-                            // echo "<div class='mt-4 text-center'>";
-                            // echo "<h3 class='text-gray-800 font-semibold text-lg'>" . htmlspecialchars($product['product_display_name']) . "</h3>";
-                            // echo "<p class='text-gray-600 text-xl font-bold'>$" . htmlspecialchars($product['price']) . "</p>";
-
-                            // // Uncomment this if you want to display the description
-                            // // echo "<p class='text-gray-700 font-medium'>" . htmlspecialchars($product['description']) . "</p>";
-
-                            // echo "<button class='mt-4 px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
-                            // echo "🛒 Add to Cart";
-                            // echo "</button>";
-                            // echo "</div>";
-                            // echo "</div>";
-
-
-
-                            ////
-
-
-
+                            //
                             echo "<div class='max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300 p-4'>";
 
                             // Product details area wrapped in a link to the product overview page
@@ -198,7 +124,7 @@ include '../layouts/head.php';
 
                             // Add to Cart button linking directly to the cart page
                             echo "<div class='mt-4 text-center'>";
-                            echo "<a href='../cart.php?id=" . htmlspecialchars($product['product_id']) . "' class='inline-block px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
+                            echo "<a href='../cartpage/cart.php?id=" . htmlspecialchars($product['product_id']) . "' class='inline-block px-6 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 hover:shadow-lg transition-all'>";
                             echo "🛒 Add to Cart";
                             echo "</a>";
                             echo "</div>";
@@ -212,19 +138,6 @@ include '../layouts/head.php';
                 </div>
 
 
-
-                <!-- Hiển thị phân trang -->
-                <div style="margin-top: 20px;">
-                    <strong>Trang:</strong>
-                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                        <?php if ($i == $page): ?>
-                            <strong><?= $i ?></strong>
-                        <?php else: ?>
-                            <a href="?sort=<?= $sort ?>&order=<?= $order ?>&page=<?= $i ?>"><?= $i ?></a>
-                        <?php endif; ?>
-                        <?php if ($i < $total_pages): ?> | <?php endif; ?>
-                    <?php endfor; ?>
-                </div>
                 <!-- Pagination -->
                 <div class="mt-4">
                     <nav aria-label="Page navigation flex justify-center items-center">
@@ -273,15 +186,17 @@ include '../layouts/head.php';
                         <?php
                         if (!empty($products_bsl)) {
                             foreach ($products_bsl as $product) {
+                                echo "<a href='../detailsPage/productdetails.php?id=" . htmlspecialchars($product['product_id']) . "' class='block'>";
                                 echo "<div>";
                                 echo "<img alt='Elastic Waist Pants' class='w-full'";
                                 echo "src=" . htmlspecialchars($product['image']) . ">";
                                 echo "<div class='mt-4'>";
                                 echo "<h3 class='text-gray-700 font-bold'> " . htmlspecialchars($product['product_display_name']) . "</h3>";
-                                echo "<p class='text-gray-500'>$" . htmlspecialchars($product['price']) . "</p>";
-                                // echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
+                                echo "<p class='text-gray-500'>" . htmlspecialchars($product['price']) . "</p>";
+                                echo "<p class='text-gray-700 font-bold'>" . htmlspecialchars($product['description']) . "</p>";
                                 echo "</div>";
                                 echo "</div>";
+                                echo "</a>";
                             }
                         } else {
                             echo "<p>No products available.</p>";

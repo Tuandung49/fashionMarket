@@ -5,27 +5,34 @@ $search = $_GET['search'] ?? '';
 $role = $_GET['role'] ?? 'all';
 
 $sql = "SELECT 
-            user_id,  
-            CONCAT(first_name, ' ', last_name) as name, 
-            email, 
-            IF(user_type = 1, 'seller', 'buyer') as role,
-            first_name,  
-            last_name  
-        FROM user 
+            u.user_id,  
+            CONCAT(u.first_name, ' ', u.last_name) as name, 
+            u.email, 
+            CASE 
+                WHEN u.user_type = 0 THEN 'buyer'
+                WHEN u.user_type = 1 THEN 'seller'
+                WHEN u.user_type = 2 THEN 'admin'
+            END as role,
+            u.first_name,  
+            u.last_name,
+            u.user_type,
+            u.user_level  -- Thêm trường user_level
+        FROM user u
         WHERE 1=1";
 
 $params = [];
 
 if (!empty($search)) {
-    $sql .= " AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ?)";
+    $sql .= " AND (u.first_name LIKE ? OR u.last_name LIKE ? OR u.email LIKE ?)";
     $params[] = "%$search%";
     $params[] = "%$search%";
     $params[] = "%$search%";
 }
 
 if ($role !== 'all') {
-    $sql .= " AND user_type = ?";
-    $params[] = ($role === 'seller') ? 1 : 0;
+    $user_type = ($role === 'buyer') ? 0 : (($role === 'seller') ? 1 : 2);
+    $sql .= " AND u.user_type = ?";
+    $params[] = $user_type;
 }
 
 $stmt = $conn->prepare($sql);
@@ -38,18 +45,19 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-$user = [];
+$users = []; // Đổi tên biến cho rõ ràng
 while ($row = $result->fetch_assoc()) {
-    $user[] = [
+    $users[] = [
         'user_id' => $row['user_id'],  
         'name' => $row['name'],
         'email' => $row['email'],
         'role' => $row['role'],
-        'first_name' => $row['first_name'],  
-        'last_name' => $row['last_name']    
+        'first_name' => $row['first_name'],
+        'last_name' => $row['last_name'],
+        'user_type' => $row['user_type'],
+        'user_level' => $row['user_level'] // Thêm user_level vào kết quả
     ];
 }
 
-header('Content-Type: application/json');
-echo json_encode($user);
+echo json_encode($users);
 ?>

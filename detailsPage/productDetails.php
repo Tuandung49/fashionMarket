@@ -87,17 +87,28 @@ include '../layouts/header_nav.php'
                 </div>
 
                 <!-- Add to Cart Button -->
-                <button class="w-full bg-gray-900 text-white py-3 rounded-md hover:bg-gray-800 mb-6">
+                <a
+                    href="../cartpage/cart.php?id=<?= htmlspecialchars($product['product_id']) ?>"
+                    class="w-full bg-gray-900 text-white py-3 rounded-md hover:bg-gray-800 mb-6 block text-center font-semibold transition">
                     THÊM VÀO GIỎ HÀNG
-                </button>
+                </a>
 
                 <!-- Product Description -->
+                <!-- <div>
+                        <h2 class="font-bold mb-2">MÔ TẢ</h2>
+                        <p class="text-gray-600">
+                            Áo thun kiểu dáng body fit tôn dáng người mặc.<br>
+                            Màu sắc trẻ trung, năng động.<br>
+                            Chất liệu: 57% Cotton, 38% Polyester, 5% Spandex
+                        </p>
+                    </div> -->
+
                 <div>
                     <h2 class="font-bold mb-2">MÔ TẢ</h2>
                     <p class="text-gray-600">
-                        Áo thun kiểu dáng body fit tôn dáng người mặc.<br>
-                        Màu sắc trẻ trung, năng động.<br>
-                        Chất liệu: 57% Cotton, 38% Polyester, 5% Spandex
+                        <?= nl2br(htmlspecialchars($product['description'])) ?>
+                        <?= nl2br(htmlspecialchars($product['description'])) ?>
+                        <?= nl2br(htmlspecialchars($product['description'])) ?>
                     </p>
                 </div>
             </div>
