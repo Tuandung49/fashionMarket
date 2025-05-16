@@ -75,7 +75,7 @@ $result = $conn->query($sql);
                 <td><?= $row['cart_id'] ?></td>
                 <td><?= $row['user_id'] ?></td>
                 <td><?= $row['order_date'] ?></td>
-                <td><?= number_format($row['total_price'], 0, ',', '.') ?> đ</td>
+                <td><?= number_format($row['total_price'], 0, ',', '.') ?> USD</td>
                 <td><?= $row['status'] ?></td>
                 <td>
                     <a href="order_detail.php?id=<?= $row['order_id'] ?>">Chi tiết</a> |

@@ -51,8 +51,8 @@ $items_result = $conn->query($sql_items);
             <th>Hình ảnh</th>
             <th>Tên sản phẩm</th>
             <th>Số lượng</th>
-            <th>Giá (đ)</th>
-            <th>Thành tiền (đ)</th>
+            <th>Giá (USD)</th>
+            <th>Thành tiền (USD)</th>
         </tr>
         <?php if ($items_result && $items_result->num_rows > 0): ?>
             <?php while ($item = $items_result->fetch_assoc()): ?>
