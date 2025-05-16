@@ -78,6 +78,7 @@ $result = $conn->query($sql);
                 <td><?= number_format($row['total_price'], 0, ',', '.') ?> đ</td>
                 <td><?= $row['status'] ?></td>
                 <td>
+                    <a href="order_detail.php?id=<?= $row['order_id'] ?>">Chi tiết</a> |
                     <?php if ($row['status'] === 'pending'): ?>
                         <a href="approve_order.php?id=<?= $row['order_id'] ?>" onclick="return confirm('Duyệt đơn hàng này?')">Duyệt</a> |
                         <a href="reject_order.php?id=<?= $row['order_id'] ?>" onclick="return confirm('Từ chối đơn hàng này?')">Từ chối</a>

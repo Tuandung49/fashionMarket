@@ -9,7 +9,6 @@
       document.getElementById('form-register').classList.remove('active');
       document.getElementById('tab-login').classList.remove('active');
       document.getElementById('tab-register').classList.remove('active');
-
       document.getElementById(`form-${tab}`).classList.add('active');
       document.getElementById(`tab-${tab}`).classList.add('active');
     }
