@@ -58,7 +58,7 @@ $user = $result->fetch_assoc();
     </section>
 
     <div class="footer">
-      <a href="../loginpage/logout.php">Đăng xuất</a>
+      <a href="../homePage/HomePage.php">Trang chủ</a>
     </div>
   </div>
 </body>
