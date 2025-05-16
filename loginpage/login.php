@@ -17,7 +17,7 @@ if($requestMethod === 'POST' ){
 
     if ($user && password_verify($password, $user['password'])) {
         // Lưu thông tin user vào session
-        $_SESSION['username'] = $user['username'];
+        $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['fullname'] = $user['fullname'];
         echo "success";
     } else {
