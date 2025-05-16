@@ -1,35 +1,44 @@
 <?php
 include 'connect.php';
 
-// Bật debug
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+header('Content-Type: application/json');
 
-// Nhận dữ liệu
-$id = $_POST['id'] ?? null;
+// Nhận dữ liệu từ FormData
+$userId = $_POST['id'] ?? null;
 $newRole = $_POST['role'] ?? null;
 
-// Validate
-if (!$id || !ctype_digit($id)) {
-    die("invalid: ID phải là số");
+// Validate input
+if (!$userId || !$newRole) {
+    echo json_encode(['status' => 'error', 'message' => 'Thiếu thông tin id hoặc role']);
+    exit;
 }
 
-if (!in_array($newRole, ['buyer', 'seller'])) {
-    die("invalid: Role không hợp lệ");
+// Chuyển role thành số
+$roleMapping = [
+    'buyer' => 0,
+    'seller' => 1,
+    'admin' => 2
+];
+
+if (!array_key_exists(strtolower($newRole), $roleMapping)) {
+    echo json_encode(['status' => 'error', 'message' => 'Role không hợp lệ']);
+    exit;
 }
 
-// Xử lý
+$roleValue = $roleMapping[strtolower($newRole)];
+
 try {
-    $user_type = ($newRole === 'seller') ? 1 : 0;
+    // Cập nhật database
     $stmt = $conn->prepare("UPDATE user SET user_type = ? WHERE user_id = ?");
-    $stmt->bind_param("ii", $user_type, $id);
+    $stmt->bind_param("ii", $roleValue, $userId);
+    $stmt->execute();
     
-    if ($stmt->execute()) {
-        echo "success";
-    } else {
-        echo "fail: " . $stmt->error;
-    }
+    echo json_encode([
+        'status' => 'success', 
+        'message' => 'Cập nhật thành công',
+        'newRole' => $newRole
+    ]);
 } catch (Exception $e) {
-    echo "error: " . $e->getMessage();
+    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
 }
 ?>
