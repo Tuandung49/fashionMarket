@@ -87,7 +87,7 @@ include '../layouts/header_nav.php'
                 </div>
 
                 <!-- Add to Cart Button -->
-                <button class="w-full bg-gray-900 text-white py-3 rounded-md hover:bg-gray-800 mb-6">
+                <button  class="w-full bg-gray-900 text-white py-3 rounded-md hover:bg-gray-800 mb-6">
                     THÊM VÀO GIỎ HÀNG
                 </button>
 
