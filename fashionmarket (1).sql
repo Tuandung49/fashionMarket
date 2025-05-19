@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 29, 2025 lúc 12:11 PM
+-- Thời gian đã tạo: Th5 16, 2025 lúc 04:41 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.0.30
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -45,12 +45,22 @@ CREATE TABLE `feedback` (
 CREATE TABLE `orders` (
   `order_id` int(11) NOT NULL,
   `cart_id` int(11) NOT NULL,
-  `promote_code_id_used` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `order_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `total_price` int(11) NOT NULL,
-  `status` bit(1) NOT NULL
+  `order_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `total_price` decimal(10,2) NOT NULL,
+  `status` enum('pending','approved','rejected') NOT NULL DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `cart_id`, `user_id`, `order_date`, `total_price`, `status`) VALUES
+(19, 3, 1, '2025-05-16 07:54:28', 896.00, ''),
+(20, 1, 1, '2025-05-16 07:55:54', 1573.00, ''),
+(21, 0, 1, '2025-05-16 08:00:16', 677.00, ''),
+(22, 8, 1, '2025-05-16 08:05:41', 677.00, ''),
+(23, 4, 1, '2025-05-16 08:55:08', 677.00, '');
 
 -- --------------------------------------------------------
 
@@ -73,8 +83,7 @@ CREATE TABLE `product_instock` (
 --
 
 INSERT INTO `product_instock` (`product_id`, `product_display_name`, `description`, `quantity`, `price`, `colour`, `image`) VALUES
-(0, 'product_display_name', 'description', 0, 0.00, 'color', 'image'),
-(1163, 'Nike Sahara Team India Fanwear Round Neck Jersey', 'Sophisticated velvet blazer for evening events.', 48, 677.00, 'Blue', 'http://assets.myntassets.com/v1/images/style/properties/df30bc92249a83ec84b5ba682bf5a0fa_images.jpg'),
+(1163, 'Nike Sahara Team India Fanwear Round Neck Jersey', 'Sophisticated velvet blazer for evening events.', 49, 677.00, 'Blue', 'https://footballholics.com/shop/74841-large_default/2009-10-india-cricket-odi-shirt.jpg'),
 (1164, 'Nike Men Blue T20 Indian Cricket Jersey', 'Effortless wrap dress with a flattering silhouette.', 94, 707.00, 'Blue', 'http://assets.myntassets.com/v1/images/style/properties/021cc52e8426a3d983e4d7ec660a70b2_images.jpg'),
 (1165, 'Nike Mean Team India Cricket Jersey', 'Chunky platform heels for a bold statement.', 55, 695.00, 'Blue', 'http://assets.myntassets.com/v1/images/style/properties/787b1a9dd9abb5279976bac35ab78c2d_images.jpg'),
 (1525, 'Puma Deck Navy Blue Backpack', 'Polished pencil skirt with modern tailoring.', 30, 896.00, 'Navy Blue', 'http://assets.myntassets.com/v1/images/style/properties/2fc776b82eaaf82497f1a13cf63eb073_images.jpg'),
@@ -271,8 +280,7 @@ INSERT INTO `product_instock` (`product_id`, `product_display_name`, `descriptio
 (1863, 'Inkfruit Men Night Wolf T-shirt', 'Daring sequined jumpsuit for bold personalities.', 54, 253.00, 'Black', 'http://assets.myntassets.com/v1/images/style/properties/0dc8401c5d335866c815ed06a629ad9e_images.jpg'),
 (1865, 'Inkfruit Men Operation Kick', 'Elegant cashmere scarf for cold weather elegance.', 42, 546.00, 'White', 'http://assets.myntassets.com/v1/images/style/properties/6e5ab73efa65884df6f17a0e818f5ed6_images.jpg'),
 (1866, 'Inkfruit Mens My Pet T-shirt', 'Polished pencil skirt with modern tailoring.', 80, 923.00, 'Maroon', 'http://assets.myntassets.com/v1/images/style/properties/43d54846d88471aef838ea72f8770d65_images.jpg'),
-(1867, 'Inkfruit Men Nayak Nahi T-shirt', 'Relaxed fit linen trousers perfect for summer.', 52, 995.00, 'Blue', 'http://assets.myntassets.com/v1/images/style/properties/e08cdf8c3edf37279065473c279e6d89_images.jpg'),
-(1868, 'Inkfruit Mens Facebook Like T-shirt', 'Embellished clutch bag for dazzling evenings.', 2, 143.00, 'White', 'http://assets.myntassets.com/v1/images/style/properties/7c46ea1fd95794b0fb7bfc4037397bda_images.jpg');
+(1867, 'Inkfruit Men Nayak Nahi T-shirt', 'Relaxed fit linen trousers perfect for summer.', 52, 995.00, 'Blue', 'http://assets.myntassets.com/v1/images/style/properties/e08cdf8c3edf37279065473c279e6d89_images.jpg');
 
 -- --------------------------------------------------------
 
@@ -281,11 +289,18 @@ INSERT INTO `product_instock` (`product_id`, `product_display_name`, `descriptio
 --
 
 CREATE TABLE `product_in_cart` (
-  `incart_product_id` int(11) NOT NULL,
   `cart_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `product_in_cart`
+--
+
+INSERT INTO `product_in_cart` (`cart_id`, `product_id`, `quantity`, `price`) VALUES
+(0, 1163, 1, 677.00);
 
 -- --------------------------------------------------------
 
@@ -313,17 +328,67 @@ CREATE TABLE `promo_code` (
 CREATE TABLE `user` (
   `user_id` int(11) NOT NULL,
   `username` varchar(25) NOT NULL,
-  `password` varchar(25) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `address` varchar(50) NOT NULL,
   `email` varchar(25) NOT NULL,
-  `last_name` varchar(25) NOT NULL,
-  `first_name` varchar(25) NOT NULL,
   `gender` bit(1) NOT NULL,
   `birth` datetime NOT NULL,
   `create_acc_day` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_type` bit(1) NOT NULL,
-  `used_promote` int(11) NOT NULL
+  `used_promote` int(11) NOT NULL,
+  `fullname` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `user`
+--
+
+INSERT INTO `user` (`user_id`, `username`, `password`, `address`, `email`, `gender`, `birth`, `create_acc_day`, `user_type`, `used_promote`, `fullname`) VALUES
+(3, 'khoa', '$2y$10$RCbBuufPSsQPhyMi/iRIoOrOEWGB2.HU5gekNPRtwRUOkKFtPWDO.', '', '123@gmail.com', b'0', '0000-00-00 00:00:00', '2025-05-16 01:59:38', b'0', 0, 'khoa');
+
+--
+-- Chỉ mục cho các bảng đã đổ
+--
+
+--
+-- Chỉ mục cho bảng `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`);
+
+--
+-- Chỉ mục cho bảng `product_instock`
+--
+ALTER TABLE `product_instock`
+  ADD PRIMARY KEY (`product_id`);
+
+--
+-- Chỉ mục cho bảng `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`user_id`);
+
+--
+-- AUTO_INCREMENT cho các bảng đã đổ
+--
+
+--
+-- AUTO_INCREMENT cho bảng `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT cho bảng `product_instock`
+--
+ALTER TABLE `product_instock`
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1870;
+
+--
+-- AUTO_INCREMENT cho bảng `user`
+--
+ALTER TABLE `user`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

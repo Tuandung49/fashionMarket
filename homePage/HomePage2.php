@@ -1,109 +1,42 @@
 <?php
-session_start();
-require_once __DIR__ . '/../config/db.php';
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "fashionmarket"; // Replace with your database name
 
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $database);
 
-// if (isset($_SESSION['username'])) {
-//     $username = $_SESSION['username'];
-//     exit;
-// }
-$stmt = $conn->prepare("SELECT fullname, email FROM user WHERE username = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-
-// Pagination & Filter & Search
-$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-$items_per_page = 6;
-$offset = ($page - 1) * $items_per_page;
-
-// Search & Filter
-$search   = isset($_GET['search'])   ? trim($_GET['search'])   : '';
-$category = isset($_GET['category']) ? trim($_GET['category']) : '';
-$colour   = isset($_GET['colour'])   ? trim($_GET['colour'])   : '';
-
-// Build WHERE
-$where  = [];
-$params = [];
-$types  = '';
-
-// Search by name, description, colour
-if ($search !== '') {
-    $where[]  = "(product_display_name LIKE ? OR description LIKE ? OR colour LIKE ?)";
-    $params[] = "%$search%";
-    $params[] = "%$search%";
-    $params[] = "%$search%";
-    $types   .= 'sss';
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// Category (by keyword in name, description, or image)
-if ($category !== '') {
-    $where[]  = "(product_display_name LIKE ? OR description LIKE ? OR image LIKE ?)";
-    $params[] = "%$category%";
-    $params[] = "%$category%";
-    $params[] = "%$category%";
-    $types   .= 'sss';
-}
 
-// Filter by colour
-if ($colour !== '') {
-    $where[]  = "colour = ?";
-    $params[] = $colour;
-    $types   .= 's';
-}
+$sql = "SELECT * FROM product_instock LIMIT 6"; // Replace 'products' with your table name
+$result = $conn->query($sql);
 
-$where_sql = (!empty($where)) ? 'WHERE ' . implode(' AND ', $where) : '';
+$products = []; // Initialize an empty array
+$products_bsl = []; // Initialize an empty array
 
-// Total count
-$sql_count = "SELECT COUNT(*) FROM product_instock $where_sql";
-$stmt_count = $conn->prepare($sql_count);
-if (!empty($params)) {
-    $stmt_count->bind_param($types, ...$params);
-}
-$stmt_count->execute();
-$stmt_count->bind_result($total_items);
-$stmt_count->fetch();
-$stmt_count->close();
-$total_pages = max(1, ceil($total_items / $items_per_page));
-
-// Products for current page
-$sql = "SELECT * FROM product_instock $where_sql LIMIT ? OFFSET ?";
-$stmt = $conn->prepare($sql);
-$final_types = $types . 'ii';
-$params2 = $params;
-$params2[] = $items_per_page;
-$params2[] = $offset;
-$stmt->bind_param($final_types, ...$params2);
-$stmt->execute();
-$result = $stmt->get_result();
-$products = [];
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $products[] = $row;
-    }
-}
-$stmt->close();
-
-// Bestseller
-$sql_bsl = "SELECT * FROM product_instock ORDER BY price DESC LIMIT 4";
-$result_bsl = $conn->query($sql_bsl);
-$products_bsl = [];
-if ($result_bsl->num_rows > 0) {
-    while ($row = $result_bsl->fetch_assoc()) {
-        $products_bsl[] = $row;
+        $products[] = $row; // Add each product to the array
     }
 }
 
-// Lấy danh sách màu sắc duy nhất (cho dropdown filter)
-$colours = [];
-$res_col = $conn->query("SELECT DISTINCT colour FROM product_instock");
-while ($row = $res_col->fetch_assoc()) {
-    $colours[] = $row['colour'];
+$sql = "SELECT * FROM product_instock ORDER BY price DESC LIMIT 4"; // Replace 'products' with your table name
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $products_bsl[] = $row; // Add each product to the array
+    }
 }
+
+// Close the connection
+$conn->close();
 ?>
-
 
 
 <?php
@@ -122,8 +55,7 @@ include '../layouts/head.php';
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8">
 
-        <!-- search -->
-        <!-- <form class="max-w-128 mx-auto">
+        <form class="max-w-128 mx-auto">
             <label for="default-search"
                 class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
             <div class="relative">
@@ -140,7 +72,7 @@ include '../layouts/head.php';
                 <button type="submit"
                     class="text-white absolute end-2.5 bottom-2.5 bg-green-500 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2">Search</button>
             </div>
-        </form> -->
+        </form>
 
         <!-- Banner -->
         <div class="bannerz-100 w-full h-64 bg-black-300">
@@ -207,70 +139,43 @@ include '../layouts/head.php';
 
 
                 <!-- Pagination -->
-                <nav aria-label="Page navigation" class="mt-4 flex justify-center">
-                    <ul class="flex -space-x-px text-base h-10">
+                <div class="mt-4">
+                    <nav aria-label="Page navigation flex justify-center items-center">
+                        <ul class="flex -space-x-px text-base h-10 justify-center">
 
-                        <?php
-                        // Tính toán cho range số trang hiển thị
-                        $max_show = 10;
-                        $start = max(1, $page - intval($max_show / 2));
-                        $end = $start + $max_show - 1;
-                        if ($end > $total_pages) {
-                            $end = $total_pages;
-                            $start = max(1, $end - $max_show + 1);
-                        }
-                        ?>
-
-                        <?php if ($page > 1): ?>
+                            <!-- <nav class="bg-blue-500 h-16 flex justify-center items-center">
+                        <ul class="flex space-x-4 text-white"> -->
                             <li>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>"
-                                    class="px-4 h-10 flex items-center bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100">Previous</a>
+                                <a href="#"
+                                    class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">Previous</a>
                             </li>
-                        <?php endif; ?>
-
-                        <?php if ($start > 1): ?>
                             <li>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => 1])) ?>"
-                                    class="px-4 h-10 flex items-center border border-gray-300 bg-white">1</a>
+                                <a href="#"
+                                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">1</a>
                             </li>
-                            <?php if ($start > 2): ?>
-                                <li>
-                                    <span class="px-2 h-10 flex items-center text-gray-400">...</span>
-                                </li>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                        <?php for ($i = $start; $i <= $end; $i++): ?>
                             <li>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"
-                                    class="px-4 h-10 flex items-center border border-gray-300 <?= $i == $page ? 'bg-green-200 font-bold' : 'bg-white' ?>">
-                                    <?= $i ?>
-                                </a>
+                                <a href="#"
+                                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a>
                             </li>
-                        <?php endfor; ?>
-
-                        <?php if ($end < $total_pages): ?>
-                            <?php if ($end < $total_pages - 1): ?>
-                                <li>
-                                    <span class="px-2 h-10 flex items-center text-gray-400">...</span>
-                                </li>
-                            <?php endif; ?>
                             <li>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $total_pages])) ?>"
-                                    class="px-4 h-10 flex items-center border border-gray-300 bg-white"><?= $total_pages ?></a>
+                                <a href="#" aria-current="page"
+                                    class="flex items-center justify-center px-4 h-10 text-white-600 border border-gray-300 bg-green-200 hover:bg-blue-100 hover:text-blue-700">3</a>
                             </li>
-                        <?php endif; ?>
-
-                        <?php if ($page < $total_pages): ?>
                             <li>
-                                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>"
-                                    class="px-4 h-10 flex items-center bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100">Next</a>
+                                <a href="#"
+                                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">4</a>
                             </li>
-                        <?php endif; ?>
-                    </ul>
-                </nav>
-
-
+                            <li>
+                                <a href="#"
+                                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">5</a>
+                            </li>
+                            <li>
+                                <a href="#"
+                                    class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
 
                 <!-- Bestseller//recommended to buy -->
                 <section>

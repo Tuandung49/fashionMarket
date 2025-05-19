@@ -4,27 +4,43 @@ $username = "root";
 $password = "";
 $database = "fashionmarket";
 
-// Kết nối
+// Kết nối 1 lần duy nhất
 $conn = new mysqli($servername, $username, $password, $database);
-
 if ($conn->connect_error) {
     die("Kết nối thất bại: " . $conn->connect_error);
 }
 
-$conn = new mysqli($servername, $username, $password, $database);
 $product_id = $_GET['id'];
-$query = "SELECT * FROM product_instock WHERE product_id = $product_id";
-$result = $conn->query($query);
+
+// Lấy sản phẩm
+$query = "SELECT * FROM product_instock WHERE product_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $product_id);
+$stmt->execute();
+$result = $stmt->get_result();
 $product = $result->fetch_assoc();
+$stmt->close();
+
+// Lấy feedback
+$sql_feedback = "
+    SELECT f.comment, f.feedback_time, f.buy_time, u.fullname
+    FROM feedback f
+    JOIN user u ON f.user_id = u.user_id
+    WHERE f.product_id = ?
+    ORDER BY f.feedback_time DESC
+";
+$stmt_fb = $conn->prepare($sql_feedback);
+$stmt_fb->bind_param("i", $product_id);
+$stmt_fb->execute();
+$result_fb = $stmt_fb->get_result();
+
+$feedbacks = [];
+while ($row = $result_fb->fetch_assoc()) {
+    $feedbacks[] = $row;
+}
+$stmt_fb->close();
 
 $conn->close();
-
-// Truy vấn đánh giá sản phẩm
-// $sql_reviews = "SELECT * FROM reviews WHERE product_id = ?";
-// $stmt_reviews = $conn->prepare($sql_reviews);
-// $stmt_reviews->bind_param("i", $product_id);
-// $stmt_reviews->execute();
-// $reviews = $stmt_reviews->get_result();
 ?>
 
 <?php
@@ -55,7 +71,7 @@ include '../layouts/header_nav.php'
                     <div>
                         <h1 class="text-3xl font-bold mb-3"><?= $product['product_display_name'] ?></h1>
                         <p class="text-gray-600 mb-3">MÃ SP: TSN<?= $product['product_id'] ?></p>
-                        <p class="text-xl font-bold mb-4"><?= $product['price'] ?></p>
+                        <p class="text-xl font-bold mb-4">$<?= $product['price'] ?></p>
                     </div>
                     <button class="text-2xl">❤️</button>
                 </div>
@@ -87,21 +103,56 @@ include '../layouts/header_nav.php'
                 </div>
 
                 <!-- Add to Cart Button -->
-                <button  class="w-full bg-gray-900 text-white py-3 rounded-md hover:bg-gray-800 mb-6">
+                <a
+                    href="../cartpage/cart.php?id=<?= htmlspecialchars($product['product_id']) ?>"
+                    class="w-full bg-gray-900 text-white py-3 rounded-md hover:bg-gray-800 mb-6 block text-center font-semibold transition">
                     THÊM VÀO GIỎ HÀNG
-                </button>
+                </a>
 
                 <!-- Product Description -->
+                <!-- <div>
+                        <h2 class="font-bold mb-2">MÔ TẢ</h2>
+                        <p class="text-gray-600">
+                            Áo thun kiểu dáng body fit tôn dáng người mặc.<br>
+                            Màu sắc trẻ trung, năng động.<br>
+                            Chất liệu: 57% Cotton, 38% Polyester, 5% Spandex
+                        </p>
+                    </div> -->
+
                 <div>
                     <h2 class="font-bold mb-2">MÔ TẢ</h2>
                     <p class="text-gray-600">
-                        Áo thun kiểu dáng body fit tôn dáng người mặc.<br>
-                        Màu sắc trẻ trung, năng động.<br>
-                        Chất liệu: 57% Cotton, 38% Polyester, 5% Spandex
+                        <?= nl2br(htmlspecialchars($product['description'])) ?>
+                        <?= nl2br(htmlspecialchars($product['description'])) ?>
+                        <?= nl2br(htmlspecialchars($product['description'])) ?>
                     </p>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="mt-8">
+        <h2 class="font-bold text-lg mb-3">Đánh giá sản phẩm</h2>
+        <?php if (empty($feedbacks)): ?>
+            <p class="text-gray-500">Chưa có đánh giá nào cho sản phẩm này.</p>
+        <?php else: ?>
+            <div class="space-y-4">
+                <?php foreach ($feedbacks as $fb): ?>
+                    <div class="border rounded-lg p-4 bg-white">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="font-semibold"><?= htmlspecialchars($fb['fullname']) ?></span>
+                            <span class="text-gray-400 text-sm ml-2">
+                                <?= date('d/m/Y H:i', strtotime($fb['feedback_time'])) ?>
+                            </span>
+                            <?php if (!empty($fb['buy_time'])): ?>
+                                <span class="text-xs text-green-600 ml-2">Đã mua: <?= date('d/m/Y', strtotime($fb['buy_time'])) ?></span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="text-gray-700"><?= nl2br(htmlspecialchars($fb['comment'])) ?></div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
 
     <?php
