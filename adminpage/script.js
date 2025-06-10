@@ -1,6 +1,6 @@
 let accounts = [];
 let currentPage = 1;
-const itemsPerPage = 7;
+const itemsPerPage = 5;
 
 function fetchAccounts() {
     const search = document.getElementById('searchInput').value;
@@ -128,7 +128,7 @@ function deleteAccount(userId) {
         return;
     }
 
-    fetch('delete_account.php', {
+    fetch('delete_accounts.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

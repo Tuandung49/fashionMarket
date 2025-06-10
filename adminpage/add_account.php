@@ -42,17 +42,24 @@ $birth_date = date('Y-m-d', strtotime($_POST['birth']));
 
 // Thêm vào database
 try {
+    $first_name = $_POST['first_name'];
+    $last_name = isset($_POST['last_name']) ? $_POST['last_name'] : '';
+    $gender = isset($_POST['gender']) ? intval($_POST['gender']) : 1;
+    $user_level = isset($_POST['user_level']) ? intval($_POST['user_level']) : 1;
+    
     $stmt = $conn->prepare("INSERT INTO user (username, password, email, first_name, last_name, gender, birth, user_type, user_level, create_acc_day) 
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, NOW())");
-    $stmt->bind_param("sssssis", 
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+    $stmt->bind_param(
+        "sssssisii",
         $username,
         $hashed_password,
         $email,
-        $_POST['first_name'],
-        $_POST['last_name'] ?? '',
-        $_POST['gender'] ?? 1,
+        $first_name,
+        $last_name,
+        $gender,
         $birth_date,
-        $user_type
+        $user_type,
+        $user_level
     );
     
     if ($stmt->execute()) {
