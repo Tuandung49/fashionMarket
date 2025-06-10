@@ -72,7 +72,7 @@ $sql_feedback = "
     FROM feedback f
     JOIN user u ON f.user_id = u.user_id
     WHERE f.product_id = ?
-    ORDER BY f.feedback_time DESC
+    ORDER BY f.feedback_time DESC   
 ";
 $stmt_fb = $conn->prepare($sql_feedback);
 $stmt_fb->bind_param("i", $product_id);

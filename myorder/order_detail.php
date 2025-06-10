@@ -9,8 +9,11 @@ if ($order_id <= 0) {
 }
 
 // Lấy thông tin đơn hàng
-$sql_order = "SELECT * FROM orders WHERE order_id = $order_id";
-$order_result = $conn->query($sql_order);
+$sql_order = "SELECT * FROM orders WHERE order_id = ?";
+$stmt_order = $conn->prepare($sql_order);
+$stmt_order->bind_param("i", $order_id);
+$stmt_order->execute();
+$order_result = $stmt_order->get_result();
 
 if ($order_result->num_rows === 0) {
     echo "Không tìm thấy đơn hàng.";
@@ -18,16 +21,18 @@ if ($order_result->num_rows === 0) {
 }
 
 $order = $order_result->fetch_assoc();
-$cart_id = $order['cart_id'];
 
-// Lấy sản phẩm trong đơn hàng + thông tin sản phẩm từ bảng product_instock
+// Lấy sản phẩm từ order_items
 $sql_items = "
-    SELECT pic.*, p.product_display_name, p.image 
-    FROM product_in_cart pic
-    JOIN product_instock p ON pic.product_id = p.product_id
-    WHERE pic.cart_id = $cart_id
+    SELECT oi.*, p.product_display_name, p.image
+    FROM order_items oi
+    JOIN product_instock p ON oi.product_id = p.product_id
+    WHERE oi.order_id = ?
 ";
-$items_result = $conn->query($sql_items);
+$stmt_items = $conn->prepare($sql_items);
+$stmt_items->bind_param("i", $order_id);
+$stmt_items->execute();
+$items_result = $stmt_items->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +41,13 @@ $items_result = $conn->query($sql_items);
     <meta charset="UTF-8">
     <title>Chi tiết đơn hàng #<?= $order['order_id'] ?></title>
     <link rel="stylesheet" href="style1.css">
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+        img { max-width: 60px; max-height: 60px; }
+        .button { margin-top: 20px; display: inline-block; padding: 10px 20px; background: #007BFF; color: white; text-decoration: none; border-radius: 5px; }
+        .button:hover { background: #0056b3; }
+    </style>
 </head>
 <body>
     <h2>Chi tiết đơn hàng #<?= $order['order_id'] ?></h2>
@@ -46,7 +58,7 @@ $items_result = $conn->query($sql_items);
     <p><strong>Trạng thái:</strong> <?= htmlspecialchars($order['status']) ?></p>
 
     <h3>Sản phẩm trong đơn hàng</h3>
-    <table border="1" cellpadding="8" cellspacing="0">
+    <table>
         <tr>
             <th>Hình ảnh</th>
             <th>Tên sản phẩm</th>
@@ -54,12 +66,12 @@ $items_result = $conn->query($sql_items);
             <th>Giá (USD)</th>
             <th>Thành tiền (USD)</th>
         </tr>
-        <?php if ($items_result && $items_result->num_rows > 0): ?>
+        <?php if ($items_result->num_rows > 0): ?>
             <?php while ($item = $items_result->fetch_assoc()): ?>
                 <tr>
                     <td>
                         <?php if (!empty($item['image'])): ?>
-                            <img src="<?= htmlspecialchars($item['image']) ?>" width="60">
+                            <img src="<?= htmlspecialchars($item['image']) ?>" alt="">
                         <?php else: ?>
                             Không có ảnh
                         <?php endif; ?>
@@ -75,6 +87,8 @@ $items_result = $conn->query($sql_items);
         <?php endif; ?>
     </table>
 
-    <p><a href="myorder.php">⬅ Quay lại danh sách đơn hàng</a></p>
+    <div style="margin-top: 20px;">
+        <a href="myorder.php" class="button">⬅ Quay lại danh sách đơn hàng</a>
+    </div>
 </body>
 </html>
