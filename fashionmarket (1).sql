@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th5 16, 2025 lúc 04:41 AM
--- Phiên bản máy phục vụ: 10.4.32-MariaDB
--- Phiên bản PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Jun 11, 2025 at 07:22 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `fashionmarket`
+-- Database: `fashionmarket`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `feedback`
+-- Table structure for table `feedback`
 --
 
 CREATE TABLE `feedback` (
@@ -39,7 +39,7 @@ CREATE TABLE `feedback` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `orders`
+-- Table structure for table `orders`
 --
 
 CREATE TABLE `orders` (
@@ -52,20 +52,37 @@ CREATE TABLE `orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `orders`
+-- Dumping data for table `orders`
 --
 
 INSERT INTO `orders` (`order_id`, `cart_id`, `user_id`, `order_date`, `total_price`, `status`) VALUES
-(19, 3, 1, '2025-05-16 07:54:28', 896.00, ''),
-(20, 1, 1, '2025-05-16 07:55:54', 1573.00, ''),
-(21, 0, 1, '2025-05-16 08:00:16', 677.00, ''),
-(22, 8, 1, '2025-05-16 08:05:41', 677.00, ''),
-(23, 4, 1, '2025-05-16 08:55:08', 677.00, '');
+(29, 0, 3, '2025-06-10 02:13:56', 1354.00, 'approved');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `product_instock`
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
+(1, 29, 1163, 2, 677.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_instock`
 --
 
 CREATE TABLE `product_instock` (
@@ -79,7 +96,7 @@ CREATE TABLE `product_instock` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `product_instock`
+-- Dumping data for table `product_instock`
 --
 
 INSERT INTO `product_instock` (`product_id`, `product_display_name`, `description`, `quantity`, `price`, `colour`, `image`) VALUES
@@ -285,7 +302,7 @@ INSERT INTO `product_instock` (`product_id`, `product_display_name`, `descriptio
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `product_in_cart`
+-- Table structure for table `product_in_cart`
 --
 
 CREATE TABLE `product_in_cart` (
@@ -295,17 +312,10 @@ CREATE TABLE `product_in_cart` (
   `price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Đang đổ dữ liệu cho bảng `product_in_cart`
---
-
-INSERT INTO `product_in_cart` (`cart_id`, `product_id`, `quantity`, `price`) VALUES
-(0, 1163, 1, 677.00);
-
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `promo_code`
+-- Table structure for table `promo_code`
 --
 
 CREATE TABLE `promo_code` (
@@ -322,7 +332,7 @@ CREATE TABLE `promo_code` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -340,55 +350,84 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`user_id`, `username`, `password`, `address`, `email`, `gender`, `birth`, `create_acc_day`, `user_type`, `used_promote`, `fullname`) VALUES
 (3, 'khoa', '$2y$10$RCbBuufPSsQPhyMi/iRIoOrOEWGB2.HU5gekNPRtwRUOkKFtPWDO.', '', '123@gmail.com', b'0', '0000-00-00 00:00:00', '2025-05-16 01:59:38', b'0', 0, 'khoa');
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `orders`
+-- Indexes for table `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`order_id`);
 
 --
--- Chỉ mục cho bảng `product_instock`
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Indexes for table `product_instock`
 --
 ALTER TABLE `product_instock`
   ADD PRIMARY KEY (`product_id`);
 
 --
--- Chỉ mục cho bảng `user`
+-- Indexes for table `product_in_cart`
+--
+ALTER TABLE `product_in_cart`
+  ADD PRIMARY KEY (`cart_id`);
+
+--
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `orders`
+-- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT cho bảng `product_instock`
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `product_instock`
 --
 ALTER TABLE `product_instock`
   MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1870;
 
 --
--- AUTO_INCREMENT cho bảng `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
