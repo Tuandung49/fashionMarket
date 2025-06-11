@@ -1,0 +1,201 @@
+/* === Cơ bản === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* === Container chính === */
+.account-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin-bottom: 25px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #4165f3;
+}
+
+/* === Form === */
+.account-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e3e9;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #4165f3;
+    box-shadow: 0 0 0 3px rgba(65, 101, 243, 0.1);
+    outline: none;
+}
+
+/* === Nút chọn loại tài khoản === */
+.account-type-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    grid-column: span 2;
+}
+
+.type-btn {
+    flex: 1;
+    padding: 12px;
+    background: #f0f2f5;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+    text-align: center;
+    color: #555;
+}
+
+.type-btn.active {
+    background: #4165f3;
+    color: white;
+    box-shadow: 0 2px 5px rgba(65, 101, 243, 0.3);
+}
+
+/* === Nút submit === */
+.form-actions {
+    grid-column: span 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.submit-btn {
+    padding: 12px 25px;
+    background: #4165f3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.submit-btn:hover {
+    background: #3a5bd9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn {
+    padding: 12px 25px;
+    background: #f0f2f5;
+    color: #555;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    text-align: center;
+}
+
+.cancel-btn:hover {
+    background: #e0e3e9;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .account-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .account-type-selector,
+    .form-actions {
+        grid-column: span 1;
+    }
+}
+
+/* === Trường bắt buộc === */
+.required {
+    color: #e74c3c;
+    font-size: 14px;
+}
+
+/* === Hiệu ứng === */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.account-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* === Level field (ẩn/hiện) === */
+.level-group {
+    transition: all 0.3s;
+    overflow: hidden;
+}
+
+/* === Gender select === */
+.gender-select {
+    display: flex;
+    gap: 15px;
+}
+
+.gender-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.gender-option input[type="radio"] {
+    accent-color: #4165f3;
+}
