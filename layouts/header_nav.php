@@ -24,8 +24,8 @@
             <a class="hover:text-green-700" href="#">
                 Collection
             </a>
-            <a class="hover:text-green-700" href="#">
-                New In
+            <a class="hover:text-green-700" href="../myproduct/index.php">
+                My Product
             </a>
             <a class="hover:text-green-700" href="../cartpage/order_history.php">
                 Order History
