@@ -27,8 +27,8 @@
             <a class="hover:text-green-700" href="#">
                 New In
             </a>
-            <a class="hover:text-green-700" href="#">
-                Store nearby
+            <a class="hover:text-green-700" href="../cartpage/order_history.php">
+                Order History
             </a>
         </nav>
 
