@@ -44,6 +44,7 @@
     </table>
 
     <form id="addAccountForm" class="account-form">
+    </form>
     <div id="pagination"></div>
 
     <script src="script.js"></script>

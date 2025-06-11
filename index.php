@@ -1,3 +1,4 @@
-<?php 
-    include("homePage/HomePage.php");
+<?php
+header('Location: homePage/HomePage.php');
+exit;
 ?>

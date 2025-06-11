@@ -4,11 +4,11 @@ include 'connect.php';
 header('Content-Type: application/json');
 
 // Nhận dữ liệu từ FormData
-$userId = $_POST['id'] ?? null;
-$newRole = $_POST['role'] ?? null;
+$userId = isset($_POST['id']) ? intval($_POST['id']) : null;
+$newRole = isset($_POST['role']) ? trim($_POST['role']) : null;
 
 // Validate input
-if (!$userId || !$newRole) {
+if ($userId === null || $userId <= 0 || empty($newRole)) {
     echo json_encode(['status' => 'error', 'message' => 'Thiếu thông tin id hoặc role']);
     exit;
 }

@@ -1,70 +1,55 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // Xử lý chuyển đổi giữa admin và seller
-    const typeButtons = document.querySelectorAll('.type-btn');
-    const accountTypeField = document.getElementById('accountType');
+accountForm.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-    typeButtons.forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-            const type = this.getAttribute('data-type');
+    // Validate form
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
 
-            // Cập nhật giao diện
-            typeButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+    if (password !== confirmPassword) {
+        alert('Mật khẩu không khớp!');
+        return;
+    }
 
-            // Cập nhật loại tài khoản
-            accountTypeField.value = type;
+    if (password.length < 6) {
+        alert('Mật khẩu phải có ít nhất 6 ký tự!');
+        return;
+    }
 
-            // Cập nhật tiêu đề form
-            document.querySelector('h1').textContent = `Thêm ${type === 'admin' ? 'Admin' : 'Seller'}`;
+    // Tạo FormData
+    const formData = new FormData(accountForm);
+
+    // Xác định user_type từ accountType
+    const accountType = formData.get('accountType');
+    formData.append('user_type', accountType === 'admin' ? '2' : '1');
+
+    // Gửi dữ liệu
+    fetch('add_account.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        // Debug: kiểm tra response có phải JSON không
+        return response.text().then(text => {
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('Server response is not valid JSON:', text);
+                alert('Lỗi server: ' + text);
+                throw e;
+            }
         });
-    });
-
-    // Xử lý submit form
-    const accountForm = document.getElementById('accountForm');
-
-    accountForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        // Validate form
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm_password').value;
-
-        if (password !== confirmPassword) {
-            alert('Mật khẩu không khớp!');
-            return;
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Thêm tài khoản thành công!');
+            accountForm.reset();
+            window.location.href = 'manage_accounts.php'; // Chuyển hướng sau khi thêm
+        } else {
+            alert('Lỗi: ' + data.message);
         }
-
-        if (password.length < 6) {
-            alert('Mật khẩu phải có ít nhất 6 ký tự!');
-            return;
-        }
-
-        // Tạo FormData
-        const formData = new FormData(accountForm);
-
-        // Xác định user_type
-        const accountType = formData.get('accountType');
-        const userType = accountType === 'admin' ? 2 : 1;
-        formData.append('user_type', userType);
-
-        // Gửi dữ liệu
-        fetch('add_account.php', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('Thêm tài khoản thành công!');
-                    accountForm.reset();
-                } else {
-                    alert('Lỗi: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Đã xảy ra lỗi khi thêm tài khoản');
-            });
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Đã xảy ra lỗi khi thêm tài khoản');
     });
 });
