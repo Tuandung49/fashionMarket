@@ -25,7 +25,7 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <title>Lịch sử đơn hàng</title>
-    <link rel="stylesheet" href="../style1.css"> <!-- Thay bằng file CSS nếu có -->
+    <link rel="stylesheet" href="style3.css"> <!-- Thay bằng file CSS nếu có -->
 </head>
 <body>
     <h2>Lịch sử đơn hàng của bạn</h2>
@@ -45,7 +45,7 @@ $result = $stmt->get_result();
                     <td><?= date('d/m/Y H:i', strtotime($order['order_date'])) ?></td>
                     <td><?= number_format($order['total_price'], 0, ',', '.') ?> đ</td>
                     <td><?= htmlspecialchars($order['status']) ?></td>
-                    <td><a href="order_detail.php?id=<?= $order['order_id'] ?>">Xem</a></td>
+                    <td><a href="buyerorder_detail.php?id=<?= $order['order_id'] ?>">Xem</a></td>
                 </tr>
             <?php endwhile; ?>
         </table>

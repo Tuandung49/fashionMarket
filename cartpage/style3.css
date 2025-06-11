@@ -1,0 +1,79 @@
+/* Reset cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4fdf6; /* Màu nền xanh nhạt */
+    padding: 40px;
+    color: #2d4739;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #27ae60;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px 16px;
+    text-align: left;
+}
+
+th {
+    background-color: #2ecc71; /* Màu xanh lá đậm */
+    color: white;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #eafaf1; /* xanh lá nhạt */
+}
+
+tr:hover {
+    background-color: #d4edda; /* xanh lá hover */
+}
+
+a {
+    color: #27ae60;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Nút quay về */
+a.back-home {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 10px 20px;
+    background-color: #27ae60;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+a.back-home:hover {
+    background-color: #219150;
+}
