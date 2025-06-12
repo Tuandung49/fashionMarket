@@ -2,8 +2,7 @@
 session_start();
 
 // Kết nối CSDL
-$conn = new mysqli("localhost", "root", "", "fashionmarket");
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+require 'config.php';
 
 $cart_id = session_id();
 

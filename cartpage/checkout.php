@@ -2,8 +2,7 @@
 session_start();
 
 // Kết nối CSDL
-$conn = new mysqli("localhost", "root", "", "fashionmarket");
-if ($conn->connect_error) die("Kết nối thất bại: " . $conn->connect_error);
+require 'config.php';
 
 // Kiểm tra đăng nhập
 $user_id = $_SESSION['user_id'] ?? null;

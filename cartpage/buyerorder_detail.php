@@ -1,7 +1,6 @@
 <?php
 // Kết nối CSDL
-$conn = new mysqli("localhost", "root", "", "fashionmarket");
-if ($conn->connect_error) die("Kết nối thất bại: " . $conn->connect_error);
+require 'config.php';
 
 $order_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
