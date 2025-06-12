@@ -58,7 +58,7 @@ if ($insert_stmt->affected_rows > 0) {
 
     // Giao diện phản hồi
     echo "<p>✅ Đơn hàng đã được tạo thành công!</p>";
-    echo "<p><a href='../myorder/order_detail.php?id=$order_id'>🧾 Xem chi tiết đơn hàng</a></p>";
+    echo "<p><a href='buyerorder_detail.php?id=$order_id'>🧾 Xem chi tiết đơn hàng</a></p>";
     echo "<a href='../homePage/HomePage.php' class='inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'>🏠 Quay về Trang chủ</a>";
 
     // Reset session ID nếu muốn tạo giỏ mới
