@@ -1,16 +1,19 @@
 <?php
 session_start();
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "fashionmarket";
+// $servername = "localhost";
+// $username = "root";
+// $password = "";
+// $database = "fashionmarket";
+
 
 // Kết nối 1 lần duy nhất
-$conn = new mysqli($servername, $username, $password, $database);
-if ($conn->connect_error) {
-    die("Kết nối thất bại: " . $conn->connect_error);
-}
+// $conn = new mysqli($servername, $username, $password, $database);
+// if ($conn->connect_error) {
+//     die("Kết nối thất bại: " . $conn->connect_error);
+// }
+
+require '../config/db.php';
 
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
