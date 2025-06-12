@@ -3,14 +3,17 @@ include 'connect.php';
 
 header('Content-Type: application/json');
 
-// Kiểm tra phương thức POST
+// Debug: Ghi lại dữ liệu POST nhận được để kiểm tra
+file_put_contents('debug.log', print_r($_POST, true), FILE_APPEND);
+
+// Chỉ chấp nhận POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['status' => 'error', 'message' => 'Chỉ chấp nhận phương thức POST']);
     exit;
 }
 
-// Lấy và validate dữ liệu
-$required_fields = ['username', 'password', 'email', 'first_name', 'birth', 'accountType'];
+// Các trường bắt buộc theo DB
+$required_fields = ['username', 'password', 'email', 'fullname', 'birth', 'address', 'user_type'];
 foreach ($required_fields as $field) {
     if (empty($_POST[$field])) {
         echo json_encode(['status' => 'error', 'message' => "Thiếu trường bắt buộc: $field"]);
@@ -18,15 +21,21 @@ foreach ($required_fields as $field) {
     }
 }
 
-// Xử lý dữ liệu
+// Lấy dữ liệu
 $username = trim($_POST['username']);
 $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 if (!$email) {
     echo json_encode(['status' => 'error', 'message' => 'Email không hợp lệ']);
     exit;
 }
+$fullname = trim($_POST['fullname']);
+$address = trim($_POST['address']);
+$gender = isset($_POST['gender']) ? intval($_POST['gender']) : 1;
+$birth = $_POST['birth'];
+$user_type = isset($_POST['user_type']) ? intval($_POST['user_type']) : 1; // 0: buyer, 1: seller, 2: admin
+$hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-// Kiểm tra trùng lặp
+// Kiểm tra trùng username/email
 $check = $conn->prepare("SELECT user_id FROM user WHERE username = ? OR email = ?");
 $check->bind_param("ss", $username, $email);
 $check->execute();
@@ -35,38 +44,27 @@ if ($check->get_result()->num_rows > 0) {
     exit;
 }
 
-// Chuẩn bị dữ liệu
-$user_type = ($_POST['accountType'] === 'admin') ? 2 : 1;
-$hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-$birth_date = date('Y-m-d', strtotime($_POST['birth']));
-
-// Thêm vào database
+// Thêm vào DB
 try {
-    $first_name = $_POST['first_name'];
-    $last_name = isset($_POST['last_name']) ? $_POST['last_name'] : '';
-    $gender = isset($_POST['gender']) ? intval($_POST['gender']) : 1;
-    $user_level = isset($_POST['user_level']) ? intval($_POST['user_level']) : 1;
-    
-    $stmt = $conn->prepare("INSERT INTO user (username, password, email, first_name, last_name, gender, birth, user_type, user_level, create_acc_day) 
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
-    $stmt->bind_param(
-        "sssssisii",
+    $stmt = $conn->prepare("INSERT INTO user (username, password, address, email, gender, birth, user_type, used_promote, fullname, create_acc_day) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?, NOW())");
+    $params = [
         $username,
         $hashed_password,
+        $address,
         $email,
-        $first_name,
-        $last_name,
-        $gender,
-        $birth_date,
-        $user_type,
-        $user_level
-    );
-    
+        (int)$gender,
+        $birth,
+        (int)$user_type,
+        $fullname
+    ];
+    $stmt->bind_param("ssssisss", ...$params);
+
     if ($stmt->execute()) {
         echo json_encode([
-            'status' => 'success', 
+            'status' => 'success',
             'message' => 'Thêm tài khoản thành công',
-            'user_id' => $stmt->insert_id // Trả về ID mới tạo
+            'user_id' => $stmt->insert_id
         ]);
     } else {
         throw new Exception($conn->error);

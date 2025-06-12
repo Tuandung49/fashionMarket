@@ -2,7 +2,7 @@
 $host = "localhost";
 $username = "root"; // Đảm bảo user có đủ quyền
 $password = "";
-$dbname = "fashionmarket1";
+$dbname = "fashionmarket";
 
 $conn = new mysqli($host, $username, $password, $dbname);
 

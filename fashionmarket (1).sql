@@ -331,10 +331,10 @@ CREATE TABLE `user` (
   `password` varchar(100) NOT NULL,
   `address` varchar(50) NOT NULL,
   `email` varchar(25) NOT NULL,
-  `gender` bit(1) NOT NULL,
+  `gender` tinyint(1) NOT NULL,
   `birth` datetime NOT NULL,
   `create_acc_day` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `user_type` bit(1) NOT NULL,
+  `user_type` tinyint(1) NOT NULL,
   `used_promote` int(11) NOT NULL,
   `fullname` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

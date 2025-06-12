@@ -13,7 +13,7 @@ if ($userId === null || $userId <= 0 || empty($newRole)) {
     exit;
 }
 
-// Chuyển role thành số
+// Chỉ cho phép buyer hoặc seller
 $roleMapping = [
     'buyer' => 0,
     'seller' => 1,

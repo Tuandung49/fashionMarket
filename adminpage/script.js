@@ -22,10 +22,10 @@ function fetchAccounts() {
 function filterAccounts() {
     fetchAccounts();
 }
-// Bảng hiển thị
+
 function renderTable() {
     const tableBody = document.getElementById('accountTableBody');
-    if (!tableBody) return; // Thêm kiểm tra null
+    if (!tableBody) return;
 
     tableBody.innerHTML = '';
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -44,7 +44,6 @@ function renderTable() {
         tableBody.appendChild(row);
     });
 
-    // Thêm event listener mới
     document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             editAccount(this.getAttribute('data-id'));
@@ -57,7 +56,7 @@ function renderTable() {
         });
     });
 }
-// Phân trang
+
 function renderPagination() {
     const paginationDiv = document.getElementById('pagination');
     paginationDiv.innerHTML = '';
@@ -65,7 +64,6 @@ function renderPagination() {
     const totalPages = Math.ceil(accounts.length / itemsPerPage);
     if (totalPages <= 1) return;
 
-    // Nút Previous
     const prevBtn = document.createElement('button');
     prevBtn.className = 'page-nav prev';
     prevBtn.innerHTML = `
@@ -82,7 +80,6 @@ function renderPagination() {
     });
     paginationDiv.appendChild(prevBtn);
 
-    // Các nút trang
     for (let i = 1; i <= totalPages; i++) {
         const pageLink = document.createElement('button');
         pageLink.textContent = i;
@@ -97,7 +94,6 @@ function renderPagination() {
         paginationDiv.appendChild(pageLink);
     }
 
-    // Nút Next
     const nextBtn = document.createElement('button');
     nextBtn.className = 'page-nav next';
     nextBtn.innerHTML = `
@@ -114,11 +110,9 @@ function renderPagination() {
     });
     paginationDiv.appendChild(nextBtn);
 }
-// Hàm xóa tài khoản
+
 function deleteAccount(userId) {
-    // Chuyển đổi sang số và validate
     const numericId = parseInt(userId);
-    
     if (isNaN(numericId) || numericId <= 0) {
         alert('ID tài khoản không hợp lệ');
         return;
@@ -142,7 +136,6 @@ function deleteAccount(userId) {
     .then(data => {
         if (data.status === 'success') {
             alert(data.message);
-            // Cập nhật giao diện
             accounts = accounts.filter(acc => acc.user_id != numericId);
             renderTable();
         } else {
@@ -154,9 +147,8 @@ function deleteAccount(userId) {
         alert('Lỗi khi xóa tài khoản: ' + error.message);
     });
 }
-// Hàm thay đổi role của tài khoản
+
 function editAccount(userId) {
-    // Chuyển đổi userId sang số để đảm bảo kiểu dữ liệu
     const numericId = parseInt(userId);
     if (isNaN(numericId)) {
         alert("ID tài khoản không hợp lệ");
@@ -175,14 +167,12 @@ function editAccount(userId) {
     );
 
     if (newRole && newRole !== account.role) {
-        // Validate role input
         const validRoles = ['buyer', 'seller', 'admin'];
         if (!validRoles.includes(newRole.toLowerCase())) {
             alert('Role không hợp lệ! Vui lòng nhập buyer, seller hoặc admin');
             return;
         }
 
-        // Tạo FormData để gửi dữ liệu
         const formData = new FormData();
         formData.append('id', numericId);
         formData.append('role', newRole.toLowerCase());
@@ -197,7 +187,6 @@ function editAccount(userId) {
             })
             .then(data => {
                 if (data.status === 'success') {
-                    // Cập nhật local data
                     const accountIndex = accounts.findIndex(acc => acc.user_id == numericId);
                     if (accountIndex !== -1) {
                         accounts[accountIndex].role = newRole.toLowerCase();
@@ -215,123 +204,7 @@ function editAccount(userId) {
     }
 }
 
-// Hàm validate form
-function validateForm(formData) {
-    // Kiểm tra password và confirm password
-    if (formData.get('password') !== formData.get('confirm_password')) {
-        return { isValid: false, message: 'Mật khẩu không khớp' };
-    }
-
-    // Kiểm tra độ dài password
-    if (formData.get('password').length < 6) {
-        return { isValid: false, message: 'Mật khẩu phải có ít nhất 6 ký tự' };
-    }
-
-    // Kiểm tra email hợp lệ
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.get('email'))) {
-        return { isValid: false, message: 'Email không hợp lệ' };
-    }
-
-    return { isValid: true };
-}
-
-
-// Hàm mở modal với loại tài khoản tương ứng
-function openAddAccountModal(accountType) {
-    const modal = document.getElementById('addAccountModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const accountTypeField = document.getElementById('accountType');
-    const levelField = document.getElementById('levelField');
-
-    // Đặt tiêu đề modal
-    modalTitle.textContent = `Add New ${accountType.charAt(0).toUpperCase() + accountType.slice(1)} `;
-
-    // Lưu loại tài khoản vào hidden field
-    accountTypeField.value = accountType;
-
-    // Hiển thị level field nếu là admin hoặc seller
-    if (accountType === 'admin' || accountType === 'seller') {
-        levelField.style.display = 'block';
-    } else {
-        levelField.style.display = 'none';
-    }
-
-    modal.style.display = 'block';
-}
-
-// Xử lý submit form
-document.getElementById('addAccountForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const form = event.target;
-    const formData = new FormData(form);
-
-    // Validate form
-    const validation = validateForm(formData);
-    if (!validation.isValid) {
-        alert(validation.message);
-        return;
-    }
-
-    // Xác định user_type dựa trên accountType
-    const accountType = formData.get('accountType');
-    let userType;
-    switch (accountType) {
-        case 'buyer': userType = 0; break;
-        case 'seller': userType = 1; break;
-        case 'admin': userType = 2; break;
-        default: userType = 0;
-    }
-    // Thêm user_type vào formData
-    formData.append('user_type', userType);
-
-    // Gửi dữ liệu
-    // Trong phần xử lý submit form thêm tài khoản
-    fetch('add_account.php', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => {
-            if (!response.ok) throw new Error('Lỗi network');
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                // Thêm tài khoản mới vào danh sách hiện tại
-                const newAccount = {
-                    user_id: data.user_id, // Sử dụng ID từ server
-                    name: formData.get('first_name') + ' ' + (formData.get('last_name') || ''),
-                    email: formData.get('email'),
-                    role: formData.get('accountType'),
-                    user_type: formData.get('accountType') === 'admin' ? 2 : 1
-                };
-
-                accounts.unshift(newAccount); // Thêm vào đầu mảng
-                renderTable(); // Render lại bảng
-
-                alert('Thêm tài khoản thành công!');
-                form.reset();
-            } else {
-                throw new Error(data.message || 'Lỗi không xác định');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Lỗi khi thêm tài khoản: ' + error.message);
-        });
-});
-
-//Thêm event listener thay vì dùng onclick inline
+// Xử lý submit form thêm tài khoản (nếu có form trên trang này)
 document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('addAccountForm');
-    if (form) { // Thêm kiểm tra null
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            // Xử lý submit
-        });
-    }
-
-    // Load dữ liệu ban đầu
     fetchAccounts();
 });

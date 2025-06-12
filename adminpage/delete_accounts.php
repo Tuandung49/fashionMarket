@@ -39,10 +39,7 @@ try {
     // Bắt đầu transaction
     $conn->begin_transaction();
 
-    // 1. Xóa các bản ghi liên quan (nếu có)
-    // $conn->query("DELETE FROM user_permissions WHERE user_id = $numericId");
-    
-    // 2. Xóa tài khoản chính
+    // Xóa tài khoản chính
     $deleteStmt = $conn->prepare("DELETE FROM user WHERE user_id = ?");
     $deleteStmt->bind_param("i", $numericId);
     $deleteStmt->execute();
