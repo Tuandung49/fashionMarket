@@ -36,17 +36,20 @@ echo '</pre>';
             </a>
 
             <?php if (isset($_SESSION['user_id'])): ?>
+                <a class="hover:text-green-700" href="../cartpage/order_history.php">
+                    Order History
+                </a>
+            <?php endif; ?>
+
+
+            <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 1): ?>
                 <a class="hover:text-green-700" href="../myproduct/index.php">
                     My Product
                 </a>
             <?php endif; ?>
 
 
-            <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 1): ?>
-                <a class="hover:text-green-700" href="../cartpage/order_history.php">
-                    Order History
-                </a>
-            <?php endif; ?>
+
 
         </nav>
 
