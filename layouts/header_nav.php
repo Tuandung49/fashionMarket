@@ -1,3 +1,13 @@
+<!-- Debug 
+ ?php
+session_start();
+echo '<pre>';
+print_r($_SESSION);
+echo '</pre>';
+? 
+-->
+
+
 <!-- Top Bar -->
 <div class="bg-green-700 text-white text-center py-2 text-sm">
     Enjoy Free Shipping On All Orders
@@ -24,12 +34,23 @@
             <a class="hover:text-green-700" href="#">
                 Collection
             </a>
-            <a class="hover:text-green-700" href="#">
-                New In
-            </a>
-            <a class="hover:text-green-700" href="#">
-                Store nearby
-            </a>
+
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <a class="hover:text-green-700" href="../cartpage/order_history.php">
+                    Order History
+                </a>
+            <?php endif; ?>
+
+
+            <?php if (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 1): ?>
+                <a class="hover:text-green-700" href="../myproduct/index.php">
+                    My Product
+                </a>
+            <?php endif; ?>
+
+
+
+
         </nav>
 
         <div class="flex items-center space-x-4">

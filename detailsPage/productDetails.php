@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback_id'])
         $stmt_check->close();
     }
     // Reload trang
-    header("Location: " . $_SERVER['REQUEST_URI']);
+    header("Location: productDetails.php?id=" . $product_id);
     exit();
 }
 
@@ -185,9 +185,7 @@ $conn->close();
                             <span class="text-gray-400 text-sm ml-2">
                                 <?= date('d/m/Y H:i', strtotime($fb['feedback_time'])) ?>
                             </span>
-                            <?php if (!empty($fb['buy_time'])): ?>
-                                <span class="text-xs text-green-600 ml-2">Đã mua: <?= date('d/m/Y', strtotime($fb['buy_time'])) ?></span>
-                            <?php endif; ?>
+                            
                             <!-- Nút XÓA -->
                             <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == $fb['user_id']): ?>
                                 <form method="post" style="display:inline;">

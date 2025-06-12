@@ -20,6 +20,7 @@ if($requestMethod === 'POST' ){
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['fullname'] = $user['fullname'];
+        $_SESSION['user_type'] = $user['user_type'];
         echo "success";
     } else {
         http_response_code(400);

@@ -1,0 +1,12 @@
+<!-- header nav -->
+    <!-- cần thêm <script src="../config/tailwind3.4.16"></script> - tailwindcss vào <head> -->
+
+
+    <?php
+    include '../layouts/header_nav.php';
+    ?>
+
+    <?php
+    include '../layouts/footer.php';
+    ?>
+
