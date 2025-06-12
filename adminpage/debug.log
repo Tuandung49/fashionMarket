@@ -1,0 +1,48 @@
+Array
+(
+    [username] => 123456
+    [email] => 123456@123456
+    [password] => 123456
+    [confirm_password] => 123456
+    [fullname] => 123456
+    [address] => 123456
+    [gender] => 1
+    [birth] => 0567-12-31
+    [user_type] => 2
+)
+Array
+(
+    [username] => 123456
+    [email] => 123456@123456.123456
+    [password] => 123456
+    [confirm_password] => 123456
+    [fullname] => 123456
+    [address] => 123456
+    [gender] => 1
+    [birth] => 0567-12-31
+    [user_type] => 2
+)
+Array
+(
+    [username] => 123456
+    [email] => 123456@123456.123456
+    [password] => 123456
+    [confirm_password] => 123456
+    [fullname] => 123456
+    [address] => 123456
+    [gender] => 1
+    [birth] => 0567-12-31
+    [user_type] => 2
+)
+Array
+(
+    [username] => 123456
+    [email] => 123456@EMAIL.com
+    [password] => 123456
+    [confirm_password] => 123456
+    [fullname] => 123456
+    [address] => 123456
+    [gender] => 1
+    [birth] => 0567-12-31
+    [user_type] => 2
+)
