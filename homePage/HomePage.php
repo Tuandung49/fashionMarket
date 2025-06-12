@@ -7,7 +7,7 @@ if (isset($_SESSION['username'])) {
     $username = $_SESSION['username'];
     // Tiếp tục xử lý nếu người dùng đã đăng nhập
 } else {
-    $username = null; // hoặc bạn có thể xử lý khác, ví dụ redirect
+    $username = null;
 }
 
 $stmt = $conn->prepare("SELECT fullname, email FROM user WHERE username = ?");
