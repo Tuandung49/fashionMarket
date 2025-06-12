@@ -319,8 +319,8 @@ CREATE TABLE `product_in_cart` (
 --
 
 CREATE TABLE `promo_code` (
-  `promo_code_id` int(11) NOT NULL,
-  `code` int(11) NOT NULL,
+  `promo_code_id` varchar(50) NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
   `time_use` int(11) NOT NULL,
   `limited` int(11) NOT NULL,
   `discount` decimal(3,2) NOT NULL,
@@ -336,7 +336,7 @@ CREATE TABLE `promo_code` (
 --
 
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(25) NOT NULL,
   `password` varchar(100) NOT NULL,
   `address` varchar(50) NOT NULL,
