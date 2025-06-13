@@ -6,7 +6,7 @@
     <title>ACCOUNT MANAGEMENT</title>
     <link rel="stylesheet" href="style.css" />
     <div class="page-header">
-        <h1>Quản lý tài khoản</h1>
+        <h1>Account Management</h1>
         <div class="action-buttons">
             <a href="add_account.html" class="add-btn">Thêm tài khoản</a>
         </div>
