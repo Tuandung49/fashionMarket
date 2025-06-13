@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 11, 2025 at 07:22 PM
+-- Generation Time: Jun 12, 2025 at 08:15 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,7 +56,12 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`order_id`, `cart_id`, `user_id`, `order_date`, `total_price`, `status`) VALUES
-(29, 0, 3, '2025-06-10 02:13:56', 1354.00, 'approved');
+(29, 0, 3, '2025-06-10 02:13:56', 1354.00, 'approved'),
+(30, 0, 3, '2025-06-13 00:11:33', 707.00, 'approved'),
+(31, 0, 3, '2025-06-13 00:14:17', 1414.00, 'rejected'),
+(32, 6, 3, '2025-06-13 00:28:13', 1384.00, 'pending'),
+(33, 0, 3, '2025-06-13 00:32:16', 695.00, 'pending'),
+(34, 0, 3, '2025-06-13 01:13:01', 1591.00, 'pending');
 
 -- --------------------------------------------------------
 
@@ -77,7 +82,14 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`) VALUES
-(1, 29, 1163, 2, 677.00);
+(1, 29, 1163, 2, 677.00),
+(2, 30, 1164, 1, 707.00),
+(3, 31, 1164, 2, 707.00),
+(4, 32, 1163, 1, 677.00),
+(5, 32, 1164, 1, 707.00),
+(6, 33, 1165, 1, 695.00),
+(7, 34, 1165, 1, 695.00),
+(8, 34, 1525, 1, 896.00);
 
 -- --------------------------------------------------------
 
@@ -306,10 +318,11 @@ INSERT INTO `product_instock` (`product_id`, `product_display_name`, `descriptio
 --
 
 CREATE TABLE `product_in_cart` (
-  `cart_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `price` decimal(10,2) NOT NULL
+  `id` int(11) NOT NULL,
+  `cart_id` varchar(255) DEFAULT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT 1,
+  `price` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -319,8 +332,8 @@ CREATE TABLE `product_in_cart` (
 --
 
 CREATE TABLE `promo_code` (
-  `promo_code_id` varchar(50) NOT NULL AUTO_INCREMENT,
-  `code` varchar(50) NOT NULL,
+  `promo_code_id` int(11) NOT NULL,
+  `code` int(11) NOT NULL,
   `time_use` int(11) NOT NULL,
   `limited` int(11) NOT NULL,
   `discount` decimal(3,2) NOT NULL,
@@ -336,15 +349,15 @@ CREATE TABLE `promo_code` (
 --
 
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
   `username` varchar(25) NOT NULL,
   `password` varchar(100) NOT NULL,
   `address` varchar(50) NOT NULL,
   `email` varchar(25) NOT NULL,
-  `gender` tinyint(1) NOT NULL,
+  `gender` bit(1) NOT NULL,
   `birth` datetime NOT NULL,
   `create_acc_day` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `user_type` tinyint(1) NOT NULL,
+  `user_type` bit(1) NOT NULL,
   `used_promote` int(11) NOT NULL,
   `fullname` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -383,7 +396,8 @@ ALTER TABLE `product_instock`
 -- Indexes for table `product_in_cart`
 --
 ALTER TABLE `product_in_cart`
-  ADD PRIMARY KEY (`cart_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_cart_product` (`cart_id`,`product_id`);
 
 --
 -- Indexes for table `user`
@@ -399,19 +413,25 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `product_instock`
 --
 ALTER TABLE `product_instock`
   MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1870;
+
+--
+-- AUTO_INCREMENT for table `product_in_cart`
+--
+ALTER TABLE `product_in_cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user`

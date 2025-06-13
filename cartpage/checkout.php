@@ -2,8 +2,7 @@
 session_start();
 
 // Kết nối CSDL
-$conn = new mysqli("localhost", "root", "", "fashionmarket");
-if ($conn->connect_error) die("Kết nối thất bại: " . $conn->connect_error);
+require 'config.php';
 
 // Kiểm tra đăng nhập
 $user_id = $_SESSION['user_id'] ?? null;
@@ -56,10 +55,22 @@ if ($insert_stmt->affected_rows > 0) {
     $clear_cart->bind_param("s", $cart_id);
     $clear_cart->execute();
 
-    // Giao diện phản hồi
-    echo "<p>✅ Đơn hàng đã được tạo thành công!</p>";
-    echo "<p><a href='../myorder/order_detail.php?id=$order_id'>🧾 Xem chi tiết đơn hàng</a></p>";
-    echo "<a href='../homePage/HomePage.php' class='inline-block mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'>🏠 Quay về Trang chủ</a>";
+    echo '
+    <div style="max-width: 600px; margin: 40px auto; padding: 30px; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 12px; font-family: sans-serif; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <h2 style="color: #2e7d32; font-size: 24px; margin-bottom: 16px;">✅ Đơn hàng đã được đặt thành công!</h2>
+        <p style="font-size: 16px; margin-bottom: 24px;">Cảm ơn bạn đã mua sắm tại <strong>FashionMarket</strong>.</p>
+
+        <a href="buyerorder_detail.php?id=' . $order_id . '" 
+        style="display: inline-block; margin: 8px; padding: 12px 24px; background-color: #43a047; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            🧾 Xem chi tiết đơn hàng
+        </a>
+
+        <a href="../homePage/HomePage.php" 
+        style="display: inline-block; margin: 8px; padding: 12px 24px; background-color: #66bb6a; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            🏠 Quay về Trang chủ
+        </a>
+    </div>';
+
 
     // Reset session ID nếu muốn tạo giỏ mới
     session_regenerate_id(true);

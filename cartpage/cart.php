@@ -2,62 +2,70 @@
 session_start();
 
 // Kết nối CSDL
-$conn = new mysqli("localhost", "root", "", "fashionmarket");
-if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+require 'config.php';
 
-// Dùng session ID làm cart_id
 $cart_id = session_id();
 
 // Thêm sản phẩm vào giỏ
 if (isset($_GET['id'])) {
     $product_id = (int)$_GET['id'];
 
-    // Kiểm tra sản phẩm đã có trong giỏ chưa
-    $check = $conn->prepare("SELECT * FROM product_in_cart WHERE cart_id = ? AND product_id = ?");
+    // Kiểm tra xem sản phẩm đã có trong giỏ chưa
+    $check = $conn->prepare("SELECT quantity FROM product_in_cart WHERE cart_id = ? AND product_id = ?");
     $check->bind_param("si", $cart_id, $product_id);
     $check->execute();
     $result = $check->get_result();
 
-    if ($result->num_rows > 0) {
-        // Đã có: tăng số lượng
-        $conn->query("UPDATE product_in_cart SET quantity = quantity + 1 WHERE cart_id = '$cart_id' AND product_id = $product_id");
+    if ($result && $result->num_rows > 0) {
+        // Đã tồn tại → Tăng số lượng
+        $update = $conn->prepare("UPDATE product_in_cart SET quantity = quantity + 1 WHERE cart_id = ? AND product_id = ?");
+        $update->bind_param("si", $cart_id, $product_id);
+        $update->execute();
     } else {
-        // Lấy thông tin sản phẩm
-        $stmt = $conn->prepare("SELECT price FROM product_instock WHERE product_id = ?");
-        $stmt->bind_param("i", $product_id);
-        $stmt->execute();
-        $res = $stmt->get_result();
+        // Chưa có → Lấy giá sản phẩm từ kho
+        $price_stmt = $conn->prepare("SELECT price FROM product_instock WHERE product_id = ?");
+        $price_stmt->bind_param("i", $product_id);
+        $price_stmt->execute();
+        $price_result = $price_stmt->get_result();
 
-        if ($res && $res->num_rows > 0) {
-            $row = $res->fetch_assoc();
-            $price = (int)$row['price'];
+        if ($price_result && $price_result->num_rows > 0) {
+            $price_row = $price_result->fetch_assoc();
+            $price = (float)$price_row['price'];
 
-            // Chèn vào bảng giỏ hàng với giá đúng
+            // Thêm mới sản phẩm vào giỏ
             $insert = $conn->prepare("INSERT INTO product_in_cart (cart_id, product_id, quantity, price) VALUES (?, ?, 1, ?)");
-            $insert->bind_param("sii", $cart_id, $product_id, $price);
+            $insert->bind_param("sid", $cart_id, $product_id, $price);
             $insert->execute();
         }
     }
 }
 
-
 // Xóa sản phẩm
 if (isset($_GET['remove'])) {
     $product_id = (int)$_GET['remove'];
-    $conn->query("DELETE FROM product_in_cart WHERE cart_id = '$cart_id' AND product_id = $product_id");
+    $delete = $conn->prepare("DELETE FROM product_in_cart WHERE cart_id = ? AND product_id = ?");
+    $delete->bind_param("si", $cart_id, $product_id);
+    $delete->execute();
 }
 
 // Xóa toàn bộ giỏ hàng
 if (isset($_GET['clear'])) {
-    $conn->query("DELETE FROM product_in_cart WHERE cart_id = '$cart_id'");
+    $clear = $conn->prepare("DELETE FROM product_in_cart WHERE cart_id = ?");
+    $clear->bind_param("s", $cart_id);
+    $clear->execute();
 }
 
-// Lấy thông tin sản phẩm trong giỏ
-$sql = "SELECT pic.*, p.product_display_name, p.image
-        FROM product_in_cart pic
-        JOIN product_instock p ON pic.product_id = p.product_id
-        WHERE pic.cart_id = '$cart_id'";
-$items = $conn->query($sql);
+// Lấy thông tin giỏ hàng
+$sql = "
+    SELECT pic.*, p.product_display_name, p.image
+    FROM product_in_cart pic
+    JOIN product_instock p ON pic.product_id = p.product_id
+    WHERE pic.cart_id = ?
+";
+$cart_stmt = $conn->prepare($sql);
+$cart_stmt->bind_param("s", $cart_id);
+$cart_stmt->execute();
+$items = $cart_stmt->get_result();
 
 $total = 0;
 ?>
@@ -72,7 +80,7 @@ $total = 0;
     <?php if ($items->num_rows > 0): ?>
         <table class="w-full table-auto border-collapse border border-gray-300">
             <thead>
-                <tr class="bg-gray-100 text-center">
+                <tr class="bg-green-100 text-center">
                     <th class="border p-2">Ảnh</th>
                     <th class="border p-2">Tên sản phẩm</th>
                     <th class="border p-2">Giá</th>
@@ -103,11 +111,10 @@ $total = 0;
         </table>
 
         <div class="mt-4 text-right">
-            <p class="text-xl font-bold">Tổng cộng: <?= number_format($total, 0, ',', '.') ?> đ</p>
+            <p class="text-xl font-bold text-green-700">Tổng cộng: <?= number_format($total, 0, ',', '.') ?> đ</p>
             <a href="checkout.php" class="inline-block mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">✅ Thanh toán</a>
             <a href="cart.php?clear=1" class="inline-block mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 ml-2">🗑 Xóa giỏ hàng</a>
         </div>
-
     <?php else: ?>
         <p class="text-gray-600">Giỏ hàng trống.</p>
     <?php endif; ?>

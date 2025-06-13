@@ -1,7 +1,6 @@
 <?php
 // Kết nối CSDL
-$conn = new mysqli("localhost", "root", "", "fashionmarket");
-if ($conn->connect_error) die("Kết nối thất bại: " . $conn->connect_error);
+require 'config.php';
 
 $order_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
@@ -88,6 +87,9 @@ $items_result = $stmt_items->get_result();
             <tr><td colspan="5">Không có sản phẩm trong đơn hàng.</td></tr>
         <?php endif; ?>
     </table>
-
+    <div style="margin-top: 20px;">
+        <a href="../homePage/Homepage.php" class="button">🏠 Quay về Trang chủ</a>
+    </div>
+    
 </body>
 </html>
