@@ -122,9 +122,9 @@ $conn->close();
                     <p class="font-medium mb-2">Màu sắc:</p>
                     <div class="flex gap-2">
                         <div class="w-8 h-8 bg-red-900 rounded-full border-2 border-black hover:border-black cursor-pointer"></div>
-                        <div class="w-8 h-8 bg-navy-900 rounded-full border-2 border-gray-300 hover:border-black cursor-pointer"></div>
+                        <!-- <div class="w-8 h-8 bg-navy-900 rounded-full border-2 border-gray-300 hover:border-black cursor-pointer"></div>
                         <div class="w-8 h-8 bg-gray-700 rounded-full border-2 border-gray-300 hover:border-black cursor-pointer"></div>
-                        <div class="w-8 h-8 bg-green-800 rounded-full border-2 border-gray-300 hover:border-black cursor-pointer"></div>
+                        <div class="w-8 h-8 bg-green-800 rounded-full border-2 border-gray-300 hover:border-black cursor-pointer"></div> -->
                     </div>
                 </div>
 
@@ -132,10 +132,10 @@ $conn->close();
                 <div class="mb-6">
                     <p class="font-medium mb-2">Kích cỡ:</p>
                     <div class="flex gap-2">
-                        <button class="px-4 py-2 border-2 border-gray-300 rounded hover:border-black">S</button>
+                        <!-- <button class="px-4 py-2 border-2 border-gray-300 rounded hover:border-black">S</button>
                         <button class="px-4 py-2 border-2 border-gray-300 rounded hover:border-black">M</button>
                         <button class="px-4 py-2 border-2 border-gray-300 rounded hover:border-black">L</button>
-                        <button class="px-4 py-2 border-2 border-gray-300 rounded hover:border-black">XL</button>
+                        <button class="px-4 py-2 border-2 border-gray-300 rounded hover:border-black">XL</button> -->
                         <button class="px-4 py-2 border-2 border-gray-300 rounded hover:border-black">XXL</button>
                     </div>
                     <a href="#" class="text-blue-600 text-sm flex items-center mt-2">
