@@ -29,25 +29,19 @@ accountForm.addEventListener('submit', function (e) {
         method: 'POST',
         body: formData
     })
-        .then(response => {
-            // Debug: kiểm tra response có phải JSON không
-            return response.text().then(text => {
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    console.error('Server response is not valid JSON:', text);
-                    alert('Lỗi server: ' + text);
-                    throw e;
+        .then(response => response.text())
+        .then(text => {
+            try {
+                const data = JSON.parse(text);
+                if (data.status === 'success') {
+                    alert('Thêm tài khoản thành công!');
+                    accountForm.reset();
+                    window.location.href = 'manage_accounts.php';
+                } else {
+                    alert('Lỗi: ' + data.message);
                 }
-            });
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                alert('Thêm tài khoản thành công!');
-                accountForm.reset();
-                window.location.href = 'manage_accounts.php'; // Chuyển hướng sau khi thêm
-            } else {
-                alert('Lỗi: ' + data.message);
+            } catch (e) {
+                alert('Lỗi server: ' + text);
             }
         })
         .catch(error => {

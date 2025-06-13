@@ -71,45 +71,6 @@
         </form>
     </div>
 
-    <script>
-        // Validate password trước khi gửi
-        document.getElementById('accountForm').addEventListener('submit', function (e) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm_password').value;
-
-            if (password !== confirmPassword) {
-                alert('Mật khẩu không khớp!');
-                e.preventDefault();
-                return;
-            }
-            if (password.length < 6) {
-                alert('Mật khẩu phải có ít nhất 6 ký tự!');
-                e.preventDefault();
-                return;
-            }
-
-            // Tạo FormData và gửi dữ liệu
-            const formData = new FormData(this);
-            fetch('add_account.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        alert('Thêm tài khoản thành công!');
-                        window.location.href = 'manage_accounts.php';
-                    } else {
-                        alert('Lỗi: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Đã xảy ra lỗi khi thêm tài khoản');
-                });
-        });
-    </script>
     <script src="account_script.js"></script>
 </body>
-
 </html>

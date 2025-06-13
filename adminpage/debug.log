@@ -46,3 +46,51 @@ Array
     [birth] => 0567-12-31
     [user_type] => 2
 )
+Array
+(
+    [username] => 13062025
+    [email] => 130620258@gmail.47SA
+    [password] => 123456
+    [confirm_password] => 123456
+    [fullname] => local
+    [address] => host
+    [gender] => 0
+    [birth] => 2002-06-13
+    [user_type] => 1
+)
+Array
+(
+    [username] => 13062025
+    [email] => 130620258@gmail.47SA
+    [password] => 123456
+    [confirm_password] => 123456
+    [fullname] => local
+    [address] => host
+    [gender] => 0
+    [birth] => 2002-06-13
+    [user_type] => 1
+)
+Array
+(
+    [username] => 13062025
+    [email] => 130620258@gmail.com
+    [password] => 123456
+    [confirm_password] => 123456
+    [fullname] => local
+    [address] => host
+    [gender] => 0
+    [birth] => 2002-06-13
+    [user_type] => 1
+)
+Array
+(
+    [username] => 13062025
+    [email] => 130620258@gmail.com
+    [password] => 123456
+    [confirm_password] => 123456
+    [fullname] => local
+    [address] => host
+    [gender] => 0
+    [birth] => 2002-06-13
+    [user_type] => 1
+)
