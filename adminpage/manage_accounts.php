@@ -8,6 +8,7 @@
     <div class="page-header">
         <h1>Account Management</h1>
         <div class="action-buttons">
+            <a href="../homePage/HomePage.php" class="add-btn">Trang chủ</a>
             <a href="add_account.html" class="add-btn">Thêm tài khoản</a>
         </div>
     </div>
